@@ -1,0 +1,35 @@
+<configuration>
+    <!-- عدد نسخ البيانات - 1 في بيئة التطوير -->
+    <property>
+        <name>dfs.replication</name>
+        <value>1</value>
+    </property>
+
+    <!-- تعطيل الصلاحيات تماماً - يسمح لأي user بالوصول -->
+    <property>
+        <name>dfs.permissions.enabled</name>
+        <value>false</value>
+    </property>
+
+    <!-- umask = 000 تعني صلاحيات 777 لكل الملفات والمجلدات الجديدة -->
+    <property>
+        <name>fs.permissions.umask-mode</name>
+        <value>000</value>
+    </property>
+
+    <!-- تفعيل WebHDFS - ضروري للـ preview و download و head و tail -->
+    <property>
+        <name>dfs.webhdfs.enabled</name>
+        <value>true</value>
+    </property>
+
+    <!-- DataNode يستخدم IP بدل hostname لحل مشكلة redirect في المتصفح -->
+    <property>
+        <name>dfs.client.use.datanode.hostname</name>
+        <value>false</value>
+    </property>
+    <property>
+        <name>dfs.datanode.use.datanode.hostname</name>
+        <value>false</value>
+    </property>
+</configuration>

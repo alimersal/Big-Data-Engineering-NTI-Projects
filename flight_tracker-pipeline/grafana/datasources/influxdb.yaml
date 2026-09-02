@@ -1,0 +1,17 @@
+apiVersion: 1
+
+datasources:
+  - name: InfluxDB
+    type: influxdb
+    uid: influxdb
+    access: proxy
+    url: http://influxdb:8086
+    isDefault: true
+    jsonData:
+      version: Flux
+      organization: flight-tracking
+      defaultBucket: flight-metrics
+      timeInterval: "5s"
+    secureJsonData:
+      token: my-super-secret-admin-token
+    editable: true

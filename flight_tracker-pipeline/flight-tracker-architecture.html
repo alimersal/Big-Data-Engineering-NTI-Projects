@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flight Tracker Pipeline Architecture</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✈️</text></svg>">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    body {
+      background: radial-gradient( #491e1e 50%, #090909 100%);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+      color: #f8fafc;
+    }
+
+    .container {
+      width: 100%;
+      height: 100%;
+      max-width: min(850px, 95vw);
+      max-height: calc(100vh - 24px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+
+    svg {
+      width: 100%;
+      height: auto;
+      max-height: calc(100vh - 95px);
+      object-fit: contain;
+      display: block;
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .info-panel {
+      margin-top: 10px;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+
+      font-size: 13px;
+      font-weight: 500;
+      color: #94a3b8;
+      min-height: 46px;
+      padding: 6px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      width: 95%;
+      flex-shrink: 0;
+    }
+  </style>
+  <base target="_blank">
+</head>
+
+<body>
+  <div class="container">
+    <svg viewBox="0 0 900 750" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+      <defs>
+        <!-- Rounded Clip -->
+        <clipPath id="roundedClip">
+          <rect x="0" y="0" width="900" height="750" rx="14" ry="14" />
+        </clipPath>
+
+        <!-- Background Grid Pattern -->
+        <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+          <path d="M 30 0 L 0 0 L 0 30" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1" />
+        </pattern>
+
+        <!-- Radial Ambient Glows -->
+        <radialGradient id="bgGlow" cx="50%" cy="35%" r="55%">
+          <stop offset="0%" stop-color="rgba(59, 130, 246, 0.12)" />
+          <stop offset="60%" stop-color="rgba(139, 92, 246, 0.04)" />
+          <stop offset="100%" stop-color="rgba(0, 0, 0, 0)" />
+        </radialGradient>
+
+        <!-- Arrow Markers -->
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M 0 0 L 0 6 L 9 3 z" fill="#38bdf8" />
+        </marker>
+        <marker id="arrowBatch" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"
+          markerUnits="strokeWidth">
+          <path d="M 0 0 L 0 6 L 9 3 z" fill="#4ade80" />
+        </marker>
+
+        <!-- Glow Filter -->
+        <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="4" result="blur" />
+          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+        </filter>
+
+        <!-- Node Gradient -->
+        <linearGradient id="nodeGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#1e293b" />
+          <stop offset="100%" stop-color="#0f172a" />
+        </linearGradient>
+
+        <!-- Docker Frame Gradient -->
+        <linearGradient id="dockerGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="rgba(59, 130, 246, 0.05)" />
+          <stop offset="100%" stop-color="rgba(14, 165, 233, 0.09)" />
+        </linearGradient>
+
+        <style>
+          .flow-line {
+            stroke: #4ade80;
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 10 8;
+            animation: flow 1.2s linear infinite;
+            opacity: 0.9;
+            filter: drop-shadow(0 0 4px rgba(74, 222, 128, 0.4));
+          }
+
+          .flow-line-slow {
+            stroke: #38bdf8;
+            stroke-width: 3;
+            fill: none;
+            stroke-dasharray: 10 8;
+            animation: flow 2s linear infinite;
+            opacity: 0.9;
+            filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.4));
+          }
+
+          @keyframes flow {
+            to {
+              stroke-dashoffset: -36;
+            }
+          }
+
+          .node-rect {
+            fill: url(#nodeGrad);
+            stroke: rgba(255, 255, 255, 0.1);
+            stroke-width: 1.5;
+            rx: 14;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+          }
+
+          .node-group:hover .node-rect {
+            stroke: #38bdf8;
+            stroke-width: 2.5;
+            filter: url(#glow);
+          }
+
+          .docker-frame {
+            fill: url(#dockerGrad);
+            stroke: #3b82f6;
+            stroke-width: 1.5;
+            stroke-dasharray: 8 5;
+            rx: 16;
+            opacity: 0.65;
+          }
+
+          .node-text {
+            fill: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 13px;
+            font-weight: 600;
+            text-anchor: middle;
+            pointer-events: none;
+            letter-spacing: 0.2px;
+          }
+
+          .node-sub {
+            fill: #94a3b8;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 11px;
+            font-weight: 400;
+            text-anchor: middle;
+            pointer-events: none;
+          }
+
+          .docker-badge-text {
+            fill: #60a5fa;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            text-anchor: start;
+            pointer-events: none;
+            letter-spacing: 0.3px;
+          }
+
+          .title-text {
+            fill: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            text-anchor: middle;
+            letter-spacing: 0.5px;
+          }
+
+          .subtitle-text {
+            fill: #94a3b8;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-size: 14px;
+            font-weight: 400;
+            text-anchor: middle;
+          }
+
+          .pulse {
+            animation: pulse 2.5s ease-in-out infinite;
+          }
+
+          @keyframes pulse {
+
+            0%,
+            100% {
+              opacity: 0.85;
+            }
+
+            50% {
+              opacity: 1;
+            }
+          }
+        </style>
+      </defs>
+
+      <g clip-path="url(#roundedClip)">
+
+        <!-- Canvas Background & Grid -->
+        <rect x="0" y="0" width="900" height="750" fill="#090d16" />
+        <rect x="0" y="0" width="900" height="750" fill="url(#grid)" />
+        <rect x="0" y="0" width="900" height="750" fill="url(#bgGlow)" />
+
+        <!-- Title -->
+        <text x="450" y="45" class="title-text">✈️ Flight Tracker Pipeline</text>
+        <text x="450" y="70" class="subtitle-text">Real-Time Data Analytics Architecture</text>
+
+        <!-- Docker Frame -->
+        <rect x="30" y="230" width="840" height="480" class="docker-frame" rx="16" />
+
+        <!-- Docker Badge -->
+        <g transform="translate(30, 237)">
+          <rect x="0" y="-22" width="162" height="28" rx="14" fill="#090d16" stroke="#3b82f6" stroke-width="1.5"></rect>
+          <image x="10" y="-18" width="18" height="18"
+            href="https://kimi-web-img.moonshot.cn/img/cdn.freebiesupply.com/cd1685ee8d22cbf3f791ebebaea09a2dbb6bf5a6.png"
+            preserveAspectRatio="xMidYMid meet" />
+          <text x="36" y="-5" class="docker-badge-text">Docker Container</text>
+        </g>
+
+        <!-- Row 1: External Services -->
+        <g class="node-group" data-name="OpenSky API"
+          data-desc="Live aircraft tracking data source providing real-time flight information worldwide."
+          transform="translate(50,95)">
+          <rect x="0" y="0" width="140" height="90" class="node-rect pulse" rx="14" />
+          <image x="55" y="15" width="30" height="30"
+            href="https://kimi-web-img.moonshot.cn/img/avatars.githubusercontent.com/b7217c27d975b358ee11d1a1d0854fc7118830b2"
+            preserveAspectRatio="xMidYMid meet" />
+          <text x="70" y="60" class="node-text">OpenSky API</text>
+          <text x="70" y="78" class="node-sub">Data Source</text>
+        </g>
+
+        <g class="node-group" data-name="Python Producer"
+          data-desc="Python script that fetches and formats flight data for ingestion." transform="translate(270,95)">
+          <rect x="0" y="0" width="140" height="90" class="node-rect pulse" rx="14" />
+          <image x="55" y="15" width="30" height="30"
+            href="https://kimi-web-img.moonshot.cn/img/assets.stickpng.com/d15009bbeb7d70e2f42cbcf7ec2101ba9de8dfa3.png"
+            preserveAspectRatio="xMidYMid meet" />
+          <text x="70" y="60" class="node-text">Python Producer</text>
+          <text x="70" y="78" class="node-sub">Script</text>
+        </g>
+
+        <!-- Row 2: Ingestion & Core Messaging -->
+        <g class="node-group" data-name="Apache Flume"
+          data-desc="Distributed log collection agent for reliably moving data into Kafka."
+          transform="translate(50,280)">
+          <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14" />
+          <image x="50" y="10" width="40" height="40"
+            href="https://kimi-web-img.moonshot.cn/img/flume.apache.org/ab97195ac45f3445a502ccb96c7cd68f9e0eddc3.png"
+            preserveAspectRatio="xMidYMid meet" />
+          <text x="70" y="64" class="node-text">Apache Flume</text>
+          <text x="70" y="80" class="node-sub">Ingestion</text>
+        </g>
+
+        <g class="node-group" data-name="Apache Kafka"
+          data-desc="Distributed event streaming platform for reliable real-time messaging, enabling both online stream processing and offline storage pipelines."
+          transform="translate(270,280)">
+          <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14" />
+          <text x="70" y="40" style="font-size: 32px; text-anchor: middle; pointer-events: none">⚡</text>
+          <text x="70" y="66" class="node-text">Apache Kafka</text>
+          <text x="70" y="82" class="node-sub">Message Broker</text>
+        </g>
+
+        <g class="node-group" data-name="Apache Flume 2"
+          data-desc="Secondary Flume agent routing Kafka streams into Hadoop HDFS." transform="translate(490,280)">
+          <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14" />
+          <image x="50" y="10" width="40" height="40"
+            href="https://kimi-web-img.moonshot.cn/img/flume.apache.org/ab97195ac45f3445a502ccb96c7cd68f9e0eddc3.png"
+            preserveAspectRatio="xMidYMid meet" />
+          <text x="70" y="64" class="node-text">Apache Flume</text>
+          <text x="70" y="80" class="node-sub">Ingestion</text>
+        </g>
+
+        <g class="node-group" data-name="Apache Hadoop"
+          data-desc="Distributed storage and batch processing framework (Data Lake)." transform="translate(710,280)">
+          <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14" />
+          <text x="70" y="40" style="font-size: 32px; text-anchor: middle; pointer-events: none">🐘</text>
+          <text x="70" y="66" class="node-text">Apache Hadoop</text>
+          <text x="70" y="82" class="node-sub">Data Lake</text>
+        </g>
+
+        <!-- Row 3: Real-Time Stream Processing & Storage -->
+        <g class="node-group" data-name="Apache Spark"
+          data-desc="In-memory real-time stream processing engine for analytics." transform="translate(270,430)">
+          <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14" />
+          <image x="55" y="15" width="30" height="30"
+            href="https://kimi-web-img.moonshot.cn/img/images.icon-icons.com/0c73f0cd329d7862abdc0fdfdb65d3fc8acb9768.png"
+            preserveAspectRatio="xMidYMid meet" />
+          <text x="70" y="60" class="node-text">Apache Spark</text>
+          <text x="70" y="78" class="node-sub">Real-Time Processing</text>
+        </g>
+
+        <g class="node-group" data-name="InfluxDB"
+          data-desc="Time-series database optimized for high-write loads and queries." transform="translate(490,430)">
+          <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14" />
+          <image x="55" y="15" width="30" height="30"
+            href="https://kimi-web-img.moonshot.cn/img/cdn.jsdelivr.net/8b336ab5d30a8439af8e6093f578bea6d9103ece.png"
+            preserveAspectRatio="xMidYMid meet" />
+          <text x="70" y="60" class="node-text">InfluxDB</text>
+          <text x="70" y="78" class="node-sub">Time-Series DB</text>
+        </g>
+
+        <!-- Row 4: Visualization -->
+        <g class="node-group" data-name="Grafana"
+          data-desc="Real-time dashboards and visualization layer for monitoring." transform="translate(490,580)">
+          <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14" />
+          <image x="55" y="15" width="30" height="30"
+            href="https://kimi-web-img.moonshot.cn/img/cdn.iconscout.com/ed7da06b372789ef3c1409ea167174a418c9b5dd.png"
+            preserveAspectRatio="xMidYMid meet" />
+          <text x="70" y="60" class="node-text">Grafana</text>
+          <text x="70" y="78" class="node-sub">Visualization</text>
+        </g>
+
+        <!-- Flow Lines -->
+        <!-- OpenSky -> Python Producer -->
+        <path d="M 190 140 L 270 140" class="flow-line" marker-end="url(#arrowBatch)" />
+        <!-- Python Producer -> Flume 1 -->
+        <path d="M 290 185 L 170 280" class="flow-line" marker-end="url(#arrowBatch)" />
+        <!-- Flume 1 -> Kafka -->
+        <path d="M 190 325 L 270 325" class="flow-line" marker-end="url(#arrowBatch)" />
+        <!-- Kafka -> Flume 2 -->
+        <path d="M 410 325 L 490 325" class="flow-line" marker-end="url(#arrowBatch)" />
+        <!-- Flume 2 -> Hadoop -->
+        <path d="M 630 325 L 710 325" class="flow-line" marker-end="url(#arrowBatch)" />
+        <!-- Kafka -> Spark -->
+        <path d="M 340 370 L 340 430" class="flow-line-slow" marker-end="url(#arrow)" />
+        <!-- Spark -> InfluxDB -->
+        <path d="M 410 475 L 490 475" class="flow-line-slow" marker-end="url(#arrow)" />
+        <!-- InfluxDB -> Grafana -->
+        <path d="M 560 520 L 560 580" class="flow-line-slow" marker-end="url(#arrow)" />
+
+        <!-- Animated Particles -->
+        <circle cx="0" cy="0" r="3.5" fill="#4ade80" visibility="hidden">
+          <set attributeName="visibility" to="visible" begin="0s" />
+          <animateMotion dur="2s" repeatCount="indefinite" path="M190 140 L270 140" />
+        </circle>
+        <circle cx="0" cy="0" r="3.5" fill="#4ade80" visibility="hidden">
+          <set attributeName="visibility" to="visible" begin="0s" />
+          <animateMotion dur="2s" repeatCount="indefinite" path="M290 185 L170 280" />
+        </circle>
+        <circle cx="0" cy="0" r="3.5" fill="#4ade80" visibility="hidden">
+          <set attributeName="visibility" to="visible" begin="0s" />
+          <animateMotion dur="2s" repeatCount="indefinite" path="M190 325 L270 325" />
+        </circle>
+        <circle cx="0" cy="0" r="3.5" fill="#4ade80" visibility="hidden">
+          <set attributeName="visibility" to="visible" begin="0s" />
+          <animateMotion dur="2s" repeatCount="indefinite" path="M410 325 L490 325" />
+        </circle>
+        <circle cx="0" cy="0" r="3.5" fill="#4ade80" visibility="hidden">
+          <set attributeName="visibility" to="visible" begin="0s" />
+          <animateMotion dur="2s" repeatCount="indefinite" path="M630 325 L710 325" />
+        </circle>
+        <circle cx="0" cy="0" r="3.5" fill="#38bdf8" visibility="hidden">
+          <set attributeName="visibility" to="visible" begin="0s" />
+          <animateMotion dur="2.5s" repeatCount="indefinite" path="M340 370 L340 430" />
+        </circle>
+        <circle cx="0" cy="0" r="3.5" fill="#38bdf8" visibility="hidden">
+          <set attributeName="visibility" to="visible" begin="0s" />
+          <animateMotion dur="2.5s" repeatCount="indefinite" path="M410 475 L490 475" />
+        </circle>
+        <circle cx="0" cy="0" r="3.5" fill="#38bdf8" visibility="hidden">
+          <set attributeName="visibility" to="visible" begin="0s" />
+          <animateMotion dur="2.5s" repeatCount="indefinite" path="M560 520 L560 580" />
+        </circle>
+
+      </g><!-- end roundedClip -->
+
+    </svg>
+
+    <div class="info-panel" id="info-panel">
+      <span id="info-text">Hover over any component to see details • Real-time flight tracking pipeline</span>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      const infoText = document.getElementById("info-text");
+      const infoPanel = document.getElementById("info-panel");
+      const nodes = document.querySelectorAll(".node-group");
+
+      nodes.forEach(node => {
+        node.addEventListener("mouseenter", function () {
+          const desc = this.getAttribute("data-desc");
+          const name = this.getAttribute("data-name");
+          if (desc) {
+            infoText.innerHTML = '<strong style="color:#d1d5db;">' + name + '</strong> — ' + desc;
+            infoPanel.style.borderColor = "rgba(56,189,248,0.4)";
+            infoPanel.style.background = "rgba(15,23,42,0.95)";
+            infoPanel.style.boxShadow = "none";
+            if (name === "Apache Kafka") {
+              infoPanel.style.textAlign = "left";
+              infoPanel.style.justifyContent = "flex-start";
+            } else {
+              infoPanel.style.textAlign = "center";
+              infoPanel.style.justifyContent = "center";
+            }
+          }
+        });
+        node.addEventListener("mouseleave", function () {
+          infoText.textContent = "Hover over any component to see details • Real-time flight tracking pipeline";
+          infoPanel.style.borderColor = "rgba(255,255,255,0.08)";
+          infoPanel.style.background = "rgba(15,23,42,0.8)";
+          infoPanel.style.boxShadow = "none";
+          infoPanel.style.textAlign = "center";
+          infoPanel.style.justifyContent = "center";
+        });
+      });
+    })();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,57 @@
+================================================================================
+  FLIGHT TRACKER PIPELINE — TROUBLESHOOTING LOG & CHEATSHEET
+================================================================================
+
+1. DOCKER & CONTAINER ISSUES
+────────────────────────────
+• Docker Engine Unresponsive / 500 Error
+  - Solution: Restart Docker Desktop daemon, then run `docker compose up -d`.
+
+• Zookeeper NodeExistsException / State Conflict
+  - Solution: Reset containers & networks: `docker compose down && docker compose up -d`
+
+• Flume Guava Jar Conflict (NoSuchMethodError: Preconditions)
+  - Solution: Dockerfile.flume excludes default Guava jar (`rm -f $FLUME_HOME/lib/guava-*.jar`) to match Hadoop 3.2.
+
+
+2. FLUME & INGESTION ISSUES
+───────────────────────────
+• Flume HTTP Source Returns 503 (ChannelFullException)
+  - Cause: High volume of flight data exceeded MemoryChannel capacity.
+  - Solution: Increased capacity to 500,000 and transactionCapacity to 20,000 in flume-collector.conf.
+
+• Flume Collector Sending to Wrong Topic / Missing Headers
+  - Solution: Configured `sinks.kafka-sink.kafka.topic = flight-tracking-raw` and enabled `useFlumeEventFormat = true`.
+
+• HDFS Permission Denied (user=dr.who)
+  - Solution: Granted full write permissions on HDFS directory:
+    `docker exec ft-hadoop-namenode hdfs dfs -chmod -R 777 /flight-data`
+
+
+3. OPENSKY API & IP RATE LIMITS
+───────────────────────────────
+• HTTP 429 Rate-Limit Block
+  - Cause: Too frequent calls to OpenSky API without authentication or exceeding IP limits.
+  - Solution:
+    1. Run `python extra-utils/DIAGNOSE_VPN_API.py` to check current block status.
+    2. Use `python extra-utils/ROTATE_IP.py` to reset network leases.
+    3. Ensure FETCH_INTERVAL in producer is set to 10s or higher.
+
+
+4. ESSENTIAL MAINTENANCE COMMANDS
+─────────────────────────────────
+• Container Management:
+  docker compose up -d                              # Start pipeline
+  docker compose down                               # Stop & remove containers
+  docker compose ps                                 # Check status
+
+• Logs Inspection:
+  docker logs ft-flight-producer -f --tail=50       # Producer logs
+  docker logs ft-flume-collector -f --tail=50        # Flume Collector logs
+  docker logs ft-spark-streaming -f --tail=50        # Spark logs
+
+• Verification & Diagnostics:
+  python extra-utils/test_data_flow.py             # E2E pipeline health test
+  python extra-utils/check_timezone.py             # Check container timezones
+  docker exec ft-kafka kafka-topics --bootstrap-server localhost:9092 --list
+================================================================================

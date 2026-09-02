@@ -1,0 +1,506 @@
+{
+  "annotations": { "list": [] },
+  "editable": false,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 1,
+  "id": null,
+  "links": [],
+  "refresh": "5s",
+  "schemaVersion": 36,
+  "style": "dark",
+  "tags": ["flight-tracker", "aviation", "real-time"],
+  "time": { "from": "now-10m", "to": "now" },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "✈️ Real-Time Flight Intelligence — Global & Egypt Analytics",
+  "uid": "flight-tracker-main",
+  "version": 11,
+  "panels": [
+    {
+      "id": 100,
+      "type": "row",
+      "title": "Global Real-Time Overview",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 0 }
+    },
+    {
+      "id": 1,
+      "type": "stat",
+      "title": "Total Flights",
+      "gridPos": { "h": 4, "w": 4, "x": 0, "y": 1 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "reduceOptions": { "calcs": ["last"] },
+        "noValue": "No Data",
+        "text": {}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "blue", "value": null }]
+          }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\") |> range(start: -20s) |> filter(fn: (r) => r._measurement == \"pipeline_summary\") |> filter(fn: (r) => r._field == \"total_flights\")"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "In Air",
+      "gridPos": { "h": 4, "w": 4, "x": 4, "y": 1 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "reduceOptions": { "calcs": ["last"] },
+        "noValue": "No Data",
+        "text": {}
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "green", "value": null }]
+          }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\") |> range(start: -20s) |> filter(fn: (r) => r._measurement == \"pipeline_summary\") |> filter(fn: (r) => r._field == \"in_air\")"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Egypt Flights",
+      "gridPos": { "h": 4, "w": 4, "x": 8, "y": 1 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "reduceOptions": { "calcs": ["last"] },
+        "noValue": "No Data"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "red", "value": null }]
+          }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\") |> range(start: -20s) |> filter(fn: (r) => r._measurement == \"egypt_summary\") |> filter(fn: (r) => r._field == \"total_flights\")"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "type": "stat",
+      "title": "Arab World",
+      "gridPos": { "h": 4, "w": 4, "x": 12, "y": 1 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": {
+        "colorMode": "background",
+        "graphMode": "none",
+        "reduceOptions": { "calcs": ["last"] },
+        "noValue": "No Data"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "thresholds" },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [{ "color": "semi-dark-green", "value": null }]
+          }
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\") |> range(start: -20s) |> filter(fn: (r) => r._measurement == \"arab_world_summary\") |> filter(fn: (r) => r._field == \"total_flights\")"
+        }
+      ]
+    },
+    {
+      "id": 101,
+      "type": "gauge",
+      "title": "Avg Global Speed",
+      "gridPos": { "h": 4, "w": 4, "x": 16, "y": 1 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": { "reduceOptions": { "calcs": ["last"] }, "noValue": "No Data" },
+      "fieldConfig": {
+        "defaults": {
+          "min": 0, "max": 1000, "unit": "velocitykmh",
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "green", "value": null },
+            { "color": "orange", "value": 600 },
+            { "color": "red", "value": 850 }
+          ]}
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\") |> range(start: -20s) |> filter(fn: (r) => r._measurement == \"pipeline_summary\") |> filter(fn: (r) => r._field == \"avg_velocity_kmh\")"
+        }
+      ]
+    },
+    {
+      "id": 102,
+      "type": "gauge",
+      "title": "Avg Global Altitude",
+      "gridPos": { "h": 4, "w": 4, "x": 20, "y": 1 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": { "reduceOptions": { "calcs": ["last"] }, "noValue": "No Data" },
+      "fieldConfig": {
+        "defaults": {
+          "min": 0, "max": 12000, "unit": "lengthm",
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "blue", "value": null },
+            { "color": "green", "value": 3000 },
+            { "color": "orange", "value": 10000 }
+          ]}
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\") |> range(start: -20s) |> filter(fn: (r) => r._measurement == \"pipeline_summary\") |> filter(fn: (r) => r._field == \"avg_altitude_meters\")"
+        }
+      ]
+    },
+    {
+      "id": 200,
+      "type": "row",
+      "title": "Live Flight Map",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 5 }
+    },
+    {
+      "id": 201,
+      "type": "geomap",
+      "title": "Active Flights Positions",
+      "gridPos": { "h": 12, "w": 24, "x": 0, "y": 6 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": {
+        "view": { "id": "coords", "lat": 29.22332, "lon": 28.650129, "zoom": 5.65 },
+        "basemap": {
+          "type": "xyz",
+          "name": "Carto Dark",
+          "config": {
+            "url": "https://a.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}.png?key=cb1_2t4r_1_22c4fe021a17a68f2e2124cc",
+            "attribution": "© CARTO, © OpenStreetMap contributors"
+          }
+        },
+        "layers": [
+          {
+            "type": "markers",
+            "name": "✈️ Flights",
+            "location": { "mode": "coords", "latitude": "latitude", "longitude": "longitude" },
+            "config": {
+              "style": {
+                "size": { "fixed": 22 },
+                "color": { "fixed": "dark-blue", "mode": "fixed" },
+                "symbol": { "fixed": "img/icons/marker/plane.svg" }
+              },
+              "showLegend": true,
+              "tooltip": true
+            },
+            "tooltip": ["airline","callsign","country","icao24","latitude","longitude","velocity_kmh","altitude_m"]
+          }
+        ],
+        "controls": {
+          "showZoom": true, "showAttribution": false, "showDebug": false,
+          "showMeasure": false, "showMousePos": true, "mouseWheelZoom": true
+        }
+      },
+      "fieldConfig": {
+        "defaults": { "custom": { "hideFrom": { "legend": false, "tooltip": false, "viz": false } } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "airline" },      "properties": [{ "id": "displayName", "value": "✈️ Airline" },       { "id": "custom.width", "value": 150 }] },
+          { "matcher": { "id": "byName", "options": "callsign" },     "properties": [{ "id": "displayName", "value": "📋 Flight Number" }, { "id": "custom.width", "value": 120 }] },
+          { "matcher": { "id": "byName", "options": "country" },      "properties": [{ "id": "displayName", "value": "🌍 Country" },       { "id": "custom.width", "value": 100 }] },
+          { "matcher": { "id": "byName", "options": "icao24" },       "properties": [{ "id": "displayName", "value": "🔧 Aircraft ID" },   { "id": "custom.width", "value": 100 }] },
+          { "matcher": { "id": "byName", "options": "latitude" },     "properties": [{ "id": "displayName", "value": "📍 Latitude" },      { "id": "decimals", "value": 2 }, { "id": "custom.width", "value": 80 }] },
+          { "matcher": { "id": "byName", "options": "longitude" },    "properties": [{ "id": "displayName", "value": "📍 Longitude" },     { "id": "decimals", "value": 2 }, { "id": "custom.width", "value": 80 }] },
+          { "matcher": { "id": "byName", "options": "velocity_kmh" }, "properties": [{ "id": "displayName", "value": "🚀 Speed (km/h)" },  { "id": "unit", "value": "velocitykmh" }, { "id": "decimals", "value": 0 }, { "id": "custom.width", "value": 100 }] },
+          { "matcher": { "id": "byName", "options": "altitude_m" },   "properties": [{ "id": "displayName", "value": "🛬 Altitude (m)" },  { "id": "unit", "value": "lengthm" }, { "id": "decimals", "value": 0 }, { "id": "custom.width", "value": 100 }] },
+          { "matcher": { "id": "byName", "options": "Time" },         "properties": [{ "id": "custom.hideFrom", "value": { "tooltip": true, "viz": false, "legend": false } }] }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\")\n  |> range(start: -20s)\n  |> filter(fn: (r) => r._measurement == \"flight_details\")\n  |> filter(fn: (r) =>\n      r._field == \"latitude\" or\n      r._field == \"longitude\" or\n      r._field == \"altitude_m\" or\n      r._field == \"velocity_kmh\"\n  )\n  |> group(columns: [\"icao24\", \"callsign\", \"country\", \"airline\", \"_field\"])\n  |> last()\n  |> group(columns: [\"icao24\", \"callsign\", \"country\", \"airline\"])\n  |> pivot(rowKey: [\"icao24\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> group()\n  |> filter(fn: (r) => exists r.latitude and exists r.longitude)\n  |> drop(columns: [\"_start\", \"_stop\", \"_measurement\"])"
+        }
+      ]
+    },
+    {
+      "id": 300,
+      "type": "row",
+      "title": "Country Rankings & Egypt Live Traffic",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 18 }
+    },
+    {
+      "id": 14,
+      "type": "bargauge",
+      "title": "🏆 Top 10 Countries by Aircraft",
+      "gridPos": { "h": 9, "w": 12, "x": 0, "y": 19 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": {
+        "displayMode": "basic", "maxVizHeight": 24, "minVizHeight": 18, "minVizWidth": 8,
+        "namePlacement": "left", "orientation": "horizontal",
+        "reduceOptions": { "calcs": ["lastNotNull"], "fields": "", "values": false },
+        "showUnfilled": true, "sizing": "manual", "valueMode": "color"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short", "decimals": 0, "min": 0, "max": 1000,
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "semi-dark-green", "value": null },
+            { "color": "semi-dark-yellow", "value": 300 },
+            { "color": "semi-dark-red", "value": 700 }
+          ]},
+          "noValue": "No data", "custom": {}
+        }
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\")\n  |> range(start: -20s)\n  |> filter(fn: (r) => r._measurement == \"country_metrics\")\n  |> filter(fn: (r) => r._field == \"flight_count\")\n  |> group(columns: [\"country\"])\n  |> last()\n  |> group()\n  |> filter(fn: (r) => r._value > 0)\n  |> sort(columns: [\"_value\"], desc: true)\n  |> limit(n: 10)\n  |> keep(columns: [\"_time\", \"country\", \"_value\"])\n  |> map(fn: (r) => ({_time: r._time, _field: r.country, _value: r._value}))\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "type": "table",
+      "title": "🇪🇬 Egypt Live Flights",
+      "gridPos": { "h": 9, "w": 12, "x": 12, "y": 19 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": {
+        "showHeader": true, "cellHeight": "sm",
+        "footer": { "show": false, "reducer": ["sum"], "countRows": false },
+        "noValue": "No Data"
+      },
+      "transformations": [
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {},
+            "indexByName": { "airline": 0, "callsign": 1, "icao24": 2, "Speed (km/h)": 3 },
+            "renameByName": {}
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": { "custom": { "align": "auto", "cellOptions": { "type": "auto" } } },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "Speed (km/h)" }, "properties": [{ "id": "unit", "value": "velocitykmh" }, { "id": "decimals", "value": 0 }] }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\")\n  |> range(start: -20s)\n  |> filter(fn: (r) => r._measurement == \"egypt_flight_detail\")\n  |> filter(fn: (r) => r._field == \"velocity_kmh\" or r._field == \"altitude_m\" or r._field == \"latitude\" or r._field == \"longitude\")\n  |> group(columns: [\"icao24\", \"callsign\", \"airline\", \"country\", \"_field\"])\n  |> last()\n  |> group(columns: [\"icao24\", \"callsign\", \"airline\", \"country\"])\n  |> pivot(rowKey: [\"icao24\"], columnKey: [\"_field\"], valueColumn: \"_value\")\n  |> group()\n  |> map(fn: (r) => ({r with \"Speed (km/h)\": if exists r.velocity_kmh then r.velocity_kmh else 0.0}))\n  |> sort(columns: [\"Speed (km/h)\"], desc: true)\n  |> drop(columns: [\"_start\", \"_stop\", \"_measurement\"])"
+        }
+      ]
+    },
+    {
+      "id": 400,
+      "type": "row",
+      "title": "🇪🇬 Egypt Flight Distribution",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 28 }
+    },
+    {
+      "id": 10,
+      "type": "piechart",
+      "title": "🇪🇬 Egypt — Vertical Movement",
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 29 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": {
+        "pieType": "pie",
+        "displayLabels": ["name", "percent"],
+        "legend": { "displayMode": "list", "placement": "right", "showLegend": true },
+        "tooltip": { "mode": "single" },
+        "noValue": "No Data"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "hideFrom": { "legend": false, "tooltip": false, "viz": false } }
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "⬆️ Climbing" },   "properties": [{ "id": "color", "value": { "fixedColor": "#73BF69", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "➡️ Level" },       "properties": [{ "id": "color", "value": { "fixedColor": "#5794F2", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "⬇️ Descending" }, "properties": [{ "id": "color", "value": { "fixedColor": "#F2495C", "mode": "fixed" } }] }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\")\n  |> range(start: -20s)\n  |> filter(fn: (r) => r._measurement == \"vertical_rate_stats\")\n  |> last()\n  |> keep(columns: [\"_time\", \"_field\", \"_value\"])\n  |> map(fn: (r) => ({_time: r._time, _field:\n      if r._field == \"Climbing\" then \"⬆️ Climbing\"\n      else if r._field == \"Descending\" then \"⬇️ Descending\"\n      else \"➡️ Level\",\n    _value: r._value}))\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "type": "piechart",
+      "title": "🇪🇬 Egypt — Altitude Bands",
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 29 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": {
+        "pieType": "donut",
+        "displayLabels": ["name", "percent"],
+        "legend": { "displayMode": "list", "placement": "right", "showLegend": true },
+        "tooltip": { "mode": "single" },
+        "noValue": "No Data"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "hideFrom": { "legend": false, "tooltip": false, "viz": false } }
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "🟠 Low < 10K ft" },  "properties": [{ "id": "color", "value": { "fixedColor": "#FF9830", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "🔵 Mid 10-30K ft" }, "properties": [{ "id": "color", "value": { "fixedColor": "#5794F2", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "🟣 High > 30K ft" }, "properties": [{ "id": "color", "value": { "fixedColor": "#B877D9", "mode": "fixed" } }] }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\")\n  |> range(start: -20s)\n  |> filter(fn: (r) => r._measurement == \"altitude_bands\")\n  |> last()\n  |> keep(columns: [\"_time\", \"_field\", \"_value\"])\n  |> map(fn: (r) => ({_time: r._time, _field:\n      if r._field == \"Low (< 10K ft)\" then \"🟠 Low < 10K ft\"\n      else if r._field == \"Medium (10K-30K ft)\" then \"🔵 Mid 10-30K ft\"\n      else \"🟣 High > 30K ft\",\n    _value: r._value}))\n  |> pivot(rowKey: [\"_time\"], columnKey: [\"_field\"], valueColumn: \"_value\")"
+        }
+      ]
+    },
+    {
+      "id": 500,
+      "type": "row",
+      "title": "🌍 Arab World — Live Country Stats",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 37 }
+    },
+    {
+      "id": 601,
+      "type": "piechart",
+      "title": "🌍 Global Fleet Status — In Air vs On Ground",
+      "gridPos": { "h": 14, "w": 6, "x": 0, "y": 38 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": {
+        "pieType": "donut",
+        "displayLabels": ["name", "percent"],
+        "legend": { "displayMode": "table", "placement": "bottom", "showLegend": true, "values": ["value", "percent"] },
+        "tooltip": { "mode": "single" },
+        "noValue": "No Data"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": { "mode": "palette-classic" },
+          "custom": { "hideFrom": { "legend": false, "tooltip": false, "viz": false } }
+        },
+        "overrides": [
+          { "matcher": { "id": "byName", "options": "✈️ In Air" },    "properties": [{ "id": "color", "value": { "fixedColor": "#73BF69", "mode": "fixed" } }] },
+          { "matcher": { "id": "byName", "options": "🛬 On Ground" }, "properties": [{ "id": "color", "value": { "fixedColor": "#F2495C", "mode": "fixed" } }] }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\")\n  |> range(start: -20s)\n  |> filter(fn: (r) => r._measurement == \"pipeline_summary\")\n  |> filter(fn: (r) => r._field == \"in_air\" or r._field == \"on_ground\")\n  |> last()\n  |> map(fn: (r) => ({\n      _field: if r._field == \"in_air\" then \"✈️ In Air\" else \"🛬 On Ground\",\n      _value: r._value\n  }))\n  |> keep(columns: [\"_field\", \"_value\"])"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "type": "table",
+      "title": "🌍 Arab World — Live Country Stats",
+      "gridPos": { "h": 14, "w": 18, "x": 6, "y": 38 },
+      "datasource": { "type": "influxdb", "uid": "influxdb" },
+      "options": {
+        "showHeader": true, "cellHeight": "sm", "noValue": "No Data",
+        "footer": { "show": false }
+      },
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "center",
+            "cellOptions": { "type": "color-background", "mode": "gradient" },
+            "minWidth": 80, "width": null
+          },
+          "color": { "mode": "thresholds" },
+          "thresholds": { "mode": "absolute", "steps": [
+            { "color": "#1F6027", "value": null },
+            { "color": "#3D9140", "value": 3 },
+            { "color": "#F2B705", "value": 10 },
+            { "color": "#E05C38", "value": 25 },
+            { "color": "#C4162A", "value": 50 }
+          ]}
+        },
+        "overrides": [
+          {
+            "matcher": { "id": "byName", "options": "country" },
+            "properties": [
+              { "id": "displayName", "value": "🌍 Country" },
+              { "id": "custom.cellOptions", "value": { "type": "auto" } },
+              { "id": "custom.align", "value": "left" },
+              { "id": "custom.minWidth", "value": 140 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "flight_count" },
+            "properties": [
+              { "id": "displayName", "value": "✈️ Flights" },
+              { "id": "custom.minWidth", "value": 80 }
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "in_air" },
+            "properties": [
+              { "id": "displayName", "value": "🔵 In Air" },
+              { "id": "custom.minWidth", "value": 80 },
+              { "id": "color", "value": { "mode": "thresholds" } },
+              { "id": "thresholds", "value": { "mode": "absolute", "steps": [
+                { "color": "#1A4B6E", "value": null }, { "color": "#2E86C1", "value": 2 },
+                { "color": "#1ABC9C", "value": 8 },   { "color": "#27AE60", "value": 20 }
+              ]}}
+            ]
+          },
+          {
+            "matcher": { "id": "byName", "options": "avg_altitude_meters" },
+            "properties": [
+              { "id": "displayName", "value": "📐 Avg Alt" },
+              { "id": "unit", "value": "lengthm" },
+              { "id": "decimals", "value": 0 },
+              { "id": "custom.minWidth", "value": 80 },
+              { "id": "color", "value": { "mode": "thresholds" } },
+              { "id": "thresholds", "value": { "mode": "absolute", "steps": [
+                { "color": "#614B79", "value": null }, { "color": "#8E44AD", "value": 3000 },
+                { "color": "#B877D9", "value": 8000 }, { "color": "#D7B4F3", "value": 11000 }
+              ]}}
+            ]
+          }
+        ]
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "query": "from(bucket: \"flight-metrics\") |> range(start: -20s) |> filter(fn: (r) => r._measurement == \"arab_country_metrics\") |> last() |> pivot(rowKey:[\"country\"], columnKey: [\"_field\"], valueColumn: \"_value\") |> group() |> drop(columns: [\"_measurement\", \"_start\", \"_stop\"]) |> sort(columns: [\"flight_count\"], desc: true)"
+        }
+      ]
+    }
+  ]
+}

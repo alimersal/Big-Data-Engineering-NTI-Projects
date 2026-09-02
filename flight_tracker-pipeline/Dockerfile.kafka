@@ -1,0 +1,7 @@
+FROM confluentinc/cp-kafka:7.4.0
+
+USER root
+# Install or update tzdata to ensure Africa/Cairo timezone works correctly
+RUN microdnf update -y tzdata || microdnf install -y tzdata
+
+USER appuser

@@ -1,0 +1,36 @@
+FROM bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8 AS hadoop
+
+FROM eclipse-temurin:8-jre
+
+RUN apt-get update && apt-get install -y wget tar && rm -rf /var/lib/apt/lists/*
+
+ENV FLUME_VERSION=1.11.0
+# FLUME_HOME must be hardcoded (Docker ENV does not support variable interpolation between ENV lines).
+# Keep this in sync with FLUME_VERSION above whenever upgrading.
+ENV FLUME_HOME=/opt/apache-flume-1.11.0-bin
+ENV HADOOP_HOME=/opt/hadoop-3.2.1
+ENV PATH=$FLUME_HOME/bin:$PATH
+
+RUN wget -qO- https://archive.apache.org/dist/flume/$FLUME_VERSION/apache-flume-$FLUME_VERSION-bin.tar.gz \
+        | tar -xzf - -C /opt \
+    && test -d $FLUME_HOME || (echo "ERROR: FLUME_HOME $FLUME_HOME not found after extract!" && exit 1) \
+    && ln -s $FLUME_HOME /opt/flume
+
+# Copy the entire Hadoop directory instead of copying individual .jar files into Flume's lib directory.
+# This prevents version conflicts (Jar Hell) for libraries like Guava, Log4j, and SLF4J between Flume and Hadoop.
+COPY --from=hadoop /opt/hadoop-3.2.1 /opt/hadoop-3.2.1
+
+# Remove Flume's Guava jar to force the use of Hadoop's Guava jar.
+# Flume 1.11 comes with Guava 31+ which breaks Hadoop 3.2's Configuration.set() method.
+RUN rm -f $FLUME_HOME/lib/guava-*.jar
+
+# Flume will automatically detect HADOOP_HOME and configure its classpath to include Hadoop jars and configs.
+# This is required for the HDFS Sink to interact with the HDFS NameNode properly.
+
+# Create symlink so both /opt/flume-conf and /opt/flume/conf resolve correctly
+# docker-compose uses --conf /opt/flume/conf which resolves via the /opt/flume symlink
+RUN ln -s $FLUME_HOME/conf /opt/flume-conf
+
+WORKDIR $FLUME_HOME
+
+ENTRYPOINT ["flume-ng"]

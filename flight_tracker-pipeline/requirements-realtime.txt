@@ -1,0 +1,7 @@
+# ─── Requirements Producer (python-scripts/flight_tracker_producer.py) ─────────────
+requests[socks]>=2.31.0,<3.0.0
+colorama>=0.4.6,<0.5.0
+
+# ─── Requirements Spark Streaming (spark-apps/flight_analytics.py) ────────────────
+# (Installed automatically in Docker via pip install --target)
+influxdb-client>=1.40.0,<2.0.0

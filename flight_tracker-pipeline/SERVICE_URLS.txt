@@ -1,0 +1,43 @@
+================================================================================
+✈️  FLIGHT TRACKER PIPELINE — SERVICE URLS & ACCESS POINTS
+================================================================================
+🚀 Flight Data Producer   : python python-scripts/flight_tracker_producer.py
+
+
+1. MONITORING & DASHBOARDS
+──────────────────────────
+📊 Grafana Dashboard      : http://localhost:3000 (admin / admin123)
+📈 InfluxDB Web UI        : http://localhost:8086 (admin / admin123)
+                       
+2. BIG DATA & PROCESSING
+──────────────────────────
+⚡ Spark Master UI        : http://localhost:8080
+🔧 Spark Worker UI        : http://localhost:8081
+📂 Hadoop NameNode (HDFS) : http://localhost:9870 (Explorer: /flight-data)
+💾 Hadoop DataNode        : http://localhost:9864
+
+3. MESSAGE STREAMING & KAFKA
+────────────────────────────
+🎛️ Kafka UI               : http://localhost:9000
+🦅 ZooNavigator (ZK UI)   : http://localhost:9001  (connection: zookeeper:2181)
+🔌 Kafka Broker (Local)   : localhost:9092  (Docker internal: ft-kafka:29092)
+🔧 ZooKeeper Admin API    : http://localhost:2182/commands/ruok
+
+4. DATA INGESTION & PIPELINE
+────────────────────────────
+📡 Flume HTTP Source      : http://localhost:44444 (POST endpoint only)
+📊 Flume Collector Mon.   : http://localhost:34545/metrics
+📊 Flume HDFS Sink Mon    : http://localhost:34546/metrics
+
+5. PIPELINE EXECUTABLES & UNIFIED TOOLKIT
+──────────────────────────────────────────
+🛠️  Unified Pipeline Toolkit : python extra-utils/TOOLKIT.py
+     └─ Menu Options:
+        [1] Pipeline Health Test       : python extra-utils/TOOLKIT.py --tool 1
+        [2] Clear Pipeline Data        : python extra-utils/TOOLKIT.py --tool 2
+        [3] Diagnose VPN / OpenSky API : python extra-utils/TOOLKIT.py --tool 3
+        [4] Rotate Public IP           : python extra-utils/TOOLKIT.py --tool 4
+        [5] Reset API Connection       : python extra-utils/TOOLKIT.py --tool 5
+        [6] Check Container Timezones  : python extra-utils/TOOLKIT.py --tool 6
+
+================================================================================

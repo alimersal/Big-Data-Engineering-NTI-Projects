@@ -1,0 +1,2 @@
+# Dependencies for Spark Streaming job (installed automatically in Docker)
+influxdb-client>=1.40.0

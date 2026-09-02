@@ -1,0 +1,552 @@
+services:
+  # ============================================
+  # Flume 1 - Collector (Receives from OpenSky API)
+  # ============================================
+  flume-collector:
+    build:
+      context: .
+      dockerfile: Dockerfile.flume
+    image: flight-tracker/flume:1.11.0
+    pull_policy: build
+    container_name: ft-flume-collector
+    restart: unless-stopped
+    ports:
+      - "44444:44444"
+      - "34545:34545"
+    volumes:
+      - ./flume-config/flume-collector.conf:/opt/flume-config/flume.conf:ro
+    environment:
+      - FLUME_AGENT_NAME=collector
+      - FLUME_JAVA_OPTS=-Xms512m -Xmx1024m
+      - TZ=Africa/Cairo
+    command: >
+      agent --conf /opt/flume/conf
+      --conf-file /opt/flume-config/flume.conf
+      --name collector
+      -Dflume.root.logger=INFO,console
+      -Dflume.monitoring.type=http
+      -Dflume.monitoring.port=34545
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "ft-flume-collector"
+    networks:
+      - flight-net
+    depends_on:
+      - kafka
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:34545"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+  # ============================================
+  # Flume 2 - HDFS Sink (Stores in Hadoop)
+  # ============================================
+  flume-hdfs:
+    build:
+      context: .
+      dockerfile: Dockerfile.flume
+    image: flight-tracker/flume:1.11.0
+    pull_policy: build
+    container_name: ft-flume-hdfs
+    restart: unless-stopped
+    ports:
+      - "34546:34546"
+    volumes:
+      - ./flume-config/flume-hdfs.conf:/opt/flume-config/flume.conf:ro
+      - ./flume-config/hdfs-site.xml:/opt/flume/conf/hdfs-site.xml:ro
+    environment:
+      - FLUME_AGENT_NAME=hdfs-sink
+      - FLUME_JAVA_OPTS=-Xms512m -Xmx1024m -Duser.timezone=Africa/Cairo
+      - TZ=Africa/Cairo
+    command: >
+      agent --conf /opt/flume/conf
+      --conf-file /opt/flume-config/flume.conf
+      --name hdfs-sink
+      -Dflume.root.logger=INFO,console
+      -Dflume.monitoring.type=http
+      -Dflume.monitoring.port=34546
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "ft-flume-hdfs"
+    networks:
+      - flight-net
+    depends_on:
+      - kafka
+      - hadoop-namenode
+      - flume-collector
+
+  # ============================================
+  # Zookeeper (Manages Kafka)
+  # ============================================
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.4.0
+    container_name: ft-zookeeper
+    restart: unless-stopped
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_4LW_COMMANDS_WHITELIST: "ruok,stat,mntr,conf"
+      TZ: Africa/Cairo
+    ports:
+      - "2181:2181"
+      - "2182:8080"
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "ft-zookeeper"
+    networks:
+      - flight-net
+    healthcheck:
+      test: ["CMD-SHELL", "python3 -c \"import socket; s=socket.socket(); s.connect(('localhost',2181)); s.send(b'ruok\\n'); print('imok' in s.recv(1024).decode()); s.close()\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  # ============================================
+  # Kafka (Message Broker)
+  # ============================================
+  kafka:
+    build:
+      context: .
+      dockerfile: Dockerfile.kafka
+    image: flight-tracker/kafka:7.4.0
+    pull_policy: build
+    container_name: ft-kafka
+    restart: unless-stopped
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:29092,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_HEAP_OPTS: "-Xmx512m -Xms256m"
+      TZ: Africa/Cairo
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+        tag: "ft-kafka"
+    networks:
+      - flight-net
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:29092 2>/dev/null || kafka-broker-api-versions --bootstrap-server localhost:9092 2>/dev/null || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  # ============================================
+  # Hadoop HDFS NameNode (Data Storage)
+  # ============================================
+  hadoop-namenode:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: ft-hadoop-namenode
+    hostname: namenode
+    restart: unless-stopped
+    environment:
+      - CLUSTER_NAME=flight-tracking
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      - HDFS_CONF_dfs_replication=1
+      - HDFS_CONF_dfs_permissions_enabled=false
+      - HDFS_CONF_dfs_permissions_superusergroup=supergroup
+      - HDFS_CONF_dfs_webhdfs_enabled=true
+      - HDFS_CONF_dfs_client_use_datanode_hostname=false
+      - HDFS_CONF_dfs_datanode_use_datanode_hostname=false
+      - CORE_CONF_fs_permissions_umask__mode=000
+      - TZ=Africa/Cairo
+      # Force JVM to use correct Cairo timezone (bde2020 image has stale tzdata -> EET UTC+2)
+      - HADOOP_OPTS=-Duser.timezone=Africa/Cairo
+      - HADOOP_NAMENODE_OPTS=-Duser.timezone=Africa/Cairo
+    entrypoint: ["/bin/bash", "-c", "cp /usr/share/zoneinfo/Etc/GMT-3 /usr/share/zoneinfo/Africa/Cairo 2>/dev/null || true; exec /entrypoint.sh /run.sh"]
+    ports:
+      - "9870:9870"
+      - "8020:8020"
+    volumes:
+      - ft-hadoop-namenode-data:/hadoop/dfs/name
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "ft-hadoop-namenode"
+    networks:
+      - flight-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9870 2>/dev/null || true"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # ============================================
+  # Hadoop HDFS DataNode
+  # ============================================
+  hadoop-datanode:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: ft-hadoop-datanode
+    hostname: localhost
+    restart: unless-stopped
+    depends_on:
+      hadoop-namenode:
+        condition: service_healthy
+    environment:
+      - CORE_CONF_fs_defaultFS=hdfs://namenode:8020
+      - HDFS_CONF_dfs_permissions_enabled=false
+      - HDFS_CONF_dfs_webhdfs_enabled=true
+      - HDFS_CONF_dfs_client_use_datanode_hostname=false
+      - HDFS_CONF_dfs_datanode_use_datanode_hostname=false
+      - HDFS_CONF_dfs_datanode_address=0.0.0.0:9866
+      - HDFS_CONF_dfs_datanode_http_address=0.0.0.0:9864
+      - HDFS_CONF_dfs_datanode_ipc_address=0.0.0.0:9867
+      - HDFS_CONF_dfs_namenode_datanode_registration_ip__hostname__check=false
+      - CORE_CONF_fs_permissions_umask__mode=000
+      - TZ=Africa/Cairo
+      # Force JVM to use correct Cairo timezone (bde2020 image has stale tzdata -> EET UTC+2)
+      - HADOOP_OPTS=-Duser.timezone=Africa/Cairo
+      - HADOOP_DATANODE_OPTS=-Duser.timezone=Africa/Cairo
+    entrypoint: ["/bin/bash", "-c", "cp /usr/share/zoneinfo/Etc/GMT-3 /usr/share/zoneinfo/Africa/Cairo 2>/dev/null || true; exec /entrypoint.sh /run.sh"]
+    ports:
+      - "9864:9864"
+      - "9866:9866"
+      - "9867:9867"
+    volumes:
+      - ft-hadoop-datanode-data:/hadoop/dfs/data
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "ft-hadoop-datanode"
+    networks:
+      - flight-net
+
+  # ============================================
+  # Spark Master
+  # ============================================
+  spark-master:
+    image: spark:3.5.0-scala2.12-java11-python3-ubuntu
+    container_name: ft-spark-master
+    hostname: spark-master
+    user: root
+    restart: unless-stopped
+    command: >
+      /opt/spark/bin/spark-class
+      org.apache.spark.deploy.master.Master
+    environment:
+      - SPARK_MASTER_HOST=spark-master
+      - SPARK_MASTER_PORT=7077
+      - SPARK_MASTER_WEBUI_PORT=8080
+      - SPARK_MASTER_LOG=/opt/spark/logs
+      - TZ=Africa/Cairo
+    ports:
+      - "8080:8080"
+      - "7077:7077"
+    volumes:
+      - ./spark-apps:/opt/spark-apps:ro
+      - ft-spark-logs:/opt/spark/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+        tag: "ft-spark-master"
+    networks:
+      - flight-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8080 2>/dev/null || true"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ============================================
+  # Spark Worker
+  # ============================================
+  spark-worker:
+    image: spark:3.5.0-scala2.12-java11-python3-ubuntu
+    container_name: ft-spark-worker
+    hostname: spark-worker
+    user: root
+    restart: unless-stopped
+    depends_on:
+      spark-master:
+        condition: service_healthy
+    command: >
+      /opt/spark/bin/spark-class
+      org.apache.spark.deploy.worker.Worker
+      spark://spark-master:7077
+    environment:
+      - SPARK_MASTER_URL=spark://spark-master:7077
+      - SPARK_WORKER_MEMORY=2G
+      - SPARK_WORKER_CORES=2
+      - SPARK_WORKER_WEBUI_PORT=8081
+      - SPARK_WORKER_LOG=/opt/spark/logs
+      - TZ=Africa/Cairo
+    ports:
+      - "8081:8081"
+    volumes:
+      - ./spark-apps:/opt/spark-apps:ro
+      - ft-spark-logs:/opt/spark/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "20m"
+        max-file: "5"
+        tag: "ft-spark-worker"
+    networks:
+      - flight-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8081 2>/dev/null || true"]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 30s
+
+  # ============================================
+  # Spark Streaming Driver (Real-time Kafka → InfluxDB)
+  # ============================================
+  spark-streaming:
+    image: spark:3.5.0-scala2.12-java11-python3-ubuntu
+    container_name: ft-spark-streaming
+    user: root
+    restart: unless-stopped
+    depends_on:
+      spark-master:
+        condition: service_healthy
+      spark-worker:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      influxdb:
+        condition: service_healthy
+    command:
+      - bash
+      - -c
+      - |
+        set -e
+        echo "=== Installing Python dependencies ==="
+        mkdir -p /root/.ivy2/cache /root/.cache/pip /opt/spark-apps/libs
+
+        pip3 install --no-cache-dir --quiet \
+          "influxdb-client>=1.36.0,<2.0.0" \
+          "urllib3>=1.26.0,<2.0.0" \
+          "python-dateutil>=2.8.0" \
+          "certifi>=2022.0.0" \
+          "reactivex>=4.0.4" \
+          "six>=1.16.0" \
+          "requests>=2.31.0" \
+          "colorama>=0.4.6"
+
+        echo "=== Dependencies installed ==="
+        echo "=== Starting Spark Streaming Job ==="
+
+        export PYTHONPATH="/usr/lib/python3/dist-packages:$(python3 -c 'import site; print(site.getsitepackages()[0])')"
+        export PYSPARK_PYTHON=python3
+        export PYSPARK_DRIVER_PYTHON=python3
+
+        /opt/spark/bin/spark-submit \
+          --master spark://spark-master:7077 \
+          --deploy-mode client \
+          --driver-memory 1G \
+          --executor-memory 1G \
+          --executor-cores 1 \
+          --conf "spark.driver.extraJavaOptions=-Duser.home=/root -Duser.timezone=Africa/Cairo" \
+          --conf "spark.executor.extraJavaOptions=-Duser.home=/root -Duser.timezone=Africa/Cairo" \
+          --conf "spark.sql.streaming.checkpointLocation=/tmp/spark-checkpoint" \
+          --conf "spark.sql.streaming.noDataMicroBatches.enabled=true" \
+          --conf "spark.sql.adaptive.enabled=true" \
+          --conf "spark.sql.adaptive.coalescePartitions.enabled=true" \
+          --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0 \
+          /opt/spark-apps/flight_analytics.py
+    environment:
+      - ALLOW_LOCAL_RUN=true
+      - TZ=Africa/Cairo
+      - PYTHONUNBUFFERED=1
+      - STREAMING_TRIGGER_INTERVAL=3 seconds
+      - KAFKA_STARTING_OFFSETS=latest
+      - KAFKA_MAX_OFFSETS_PER_TRIGGER=20000
+      - INFLUX_BATCH_SIZE=1000
+      - INFLUX_FLUSH_INTERVAL=500
+    volumes:
+      - ./spark-apps:/opt/spark-apps:ro
+      - ft-spark-checkpoint:/tmp/spark-checkpoint
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "5"
+        tag: "ft-spark-streaming"
+    networks:
+      - flight-net
+
+  # ============================================
+  # InfluxDB (Time-Series Database)
+  # ============================================
+  influxdb:
+    image: influxdb:2.7
+    container_name: ft-influxdb
+    user: root
+    restart: unless-stopped
+    ports:
+      - "8086:8086"
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=setup
+      - DOCKER_INFLUXDB_INIT_USERNAME=admin
+      - DOCKER_INFLUXDB_INIT_PASSWORD=admin123
+      - DOCKER_INFLUXDB_INIT_ORG=flight-tracking
+      - DOCKER_INFLUXDB_INIT_BUCKET=flight-metrics
+      - DOCKER_INFLUXDB_INIT_RETENTION=7d
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=my-super-secret-admin-token
+      - INFLUXD_LOG_LEVEL=info
+      - TZ=Africa/Cairo
+    volumes:
+      - ft-influxdb-data:/var/lib/influxdb2
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "ft-influxdb"
+    healthcheck:
+      test: ["CMD", "influx", "ping", "--host", "http://localhost:8086"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    networks:
+      flight-net:
+        aliases:
+          - influxdb
+
+  # ============================================
+  # Grafana (Dashboard)
+  # ============================================
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: ft-grafana
+    user: root
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin123
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+      - GF_DASHBOARDS_DEFAULT_HOME_DASHBOARD_PATH=/etc/grafana/provisioning/dashboards/flight_tracker_dashboard.json
+      - GF_USERS_DEFAULT_THEME=dark
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Viewer
+      - GF_AUTH_ANONYMOUS_ORG_NAME=Main Org.
+      - GF_VIEWERS_CAN_EDIT=false
+      - GF_EDITORS_CAN_ADMIN=false
+      - GF_DASHBOARDS_VERSIONS_TO_KEEP=1
+      - GF_EXPLORE_ENABLED=false
+      - GF_SECURITY_DISABLE_GRAVATAR=true
+      - TZ=Africa/Cairo
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      influxdb:
+        condition: service_healthy
+    volumes:
+      - ft-grafana-data:/var/lib/grafana
+      - ./grafana/datasources:/etc/grafana/provisioning/datasources:ro
+      - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+        tag: "ft-grafana"
+    networks:
+      - flight-net
+
+  # ============================================
+  # Kafka UI (Web UI for Kafka)
+  # ============================================
+  kafka-ui:
+    image: provectuslabs/kafka-ui:v0.7.2
+    container_name: ft-kafka-ui
+    restart: unless-stopped
+    ports:
+      - "9000:8080"
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:29092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper:2181
+      - TZ=Africa/Cairo
+    depends_on:
+      - kafka
+      - zookeeper
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        tag: "ft-kafka-ui"
+    networks:
+      - flight-net
+
+  # ============================================
+  # ZooNavigator (Web UI for ZooKeeper)
+  # ============================================
+  zoonavigator:
+    image: elkozmon/zoonavigator:latest
+    container_name: ft-zoonavigator
+    restart: unless-stopped
+    ports:
+      - "9001:9000"
+    environment:
+      - HTTP_PORT=9000
+      - TZ=Africa/Cairo
+    depends_on:
+      - zookeeper
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "2"
+        tag: "ft-zoonavigator"
+    networks:
+      - flight-net
+
+  # ============================================
+
+networks:
+  flight-net:
+    name: flight-tracker-network
+    driver: bridge
+
+volumes:
+  ft-hadoop-namenode-data:
+    name: ft-hadoop-namenode-data
+  ft-hadoop-datanode-data:
+    name: ft-hadoop-datanode-data
+  ft-influxdb-data:
+    name: ft-influxdb-data
+  ft-grafana-data:
+    name: ft-grafana-data
+  ft-spark-logs:
+    name: ft-spark-logs
+  ft-spark-checkpoint:
+    name: ft-spark-checkpoint

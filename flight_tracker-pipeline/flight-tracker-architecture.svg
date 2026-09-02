@@ -1,0 +1,264 @@
+<svg viewBox="0 0 900 700" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <!-- Background Grid Pattern -->
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 L 0 30" fill="none" stroke="rgba(255, 255, 255, 0.03)" stroke-width="1"/>
+    </pattern>
+
+    <!-- Radial Ambient Glows -->
+    <radialGradient id="bgGlow" cx="50%" cy="35%" r="55%">
+      <stop offset="0%" stop-color="rgba(59, 130, 246, 0.12)"/>
+      <stop offset="60%" stop-color="rgba(139, 92, 246, 0.04)"/>
+      <stop offset="100%" stop-color="rgba(0, 0, 0, 0)"/>
+    </radialGradient>
+
+    <!-- Arrow Markers -->
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 0 6 L 9 3 z" fill="#38bdf8"/>
+    </marker>
+    <marker id="arrowBatch" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M 0 0 L 0 6 L 9 3 z" fill="#4ade80"/>
+    </marker>
+
+    <!-- Glow Filter -->
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+
+    <!-- Node Gradient -->
+    <linearGradient id="nodeGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+
+    <!-- Docker Frame Gradient -->
+    <linearGradient id="dockerGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="rgba(59, 130, 246, 0.05)"/>
+      <stop offset="100%" stop-color="rgba(14, 165, 233, 0.09)"/>
+    </linearGradient>
+
+    <style>
+      .flow-line {
+        stroke: #4ade80;
+        stroke-width: 3;
+        fill: none;
+        stroke-dasharray: 10 8;
+        animation: flow 1.2s linear infinite;
+        opacity: 0.9;
+        filter: drop-shadow(0 0 4px rgba(74, 222, 128, 0.4));
+      }
+      .flow-line-slow {
+        stroke: #38bdf8;
+        stroke-width: 3;
+        fill: none;
+        stroke-dasharray: 10 8;
+        animation: flow 2s linear infinite;
+        opacity: 0.9;
+        filter: drop-shadow(0 0 4px rgba(56, 189, 248, 0.4));
+      }
+      @keyframes flow {
+        to { stroke-dashoffset: -36; }
+      }
+      .node-rect {
+        fill: url(#nodeGrad);
+        stroke: rgba(255, 255, 255, 0.1);
+        stroke-width: 1.5;
+        rx: 14;
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .node-group:hover .node-rect {
+        stroke: #38bdf8;
+        stroke-width: 2.5;
+        filter: url(#glow);
+      }
+      .docker-frame {
+        fill: url(#dockerGrad);
+        stroke: #3b82f6;
+        stroke-width: 1.5;
+        stroke-dasharray: 8 5;
+        rx: 16;
+        opacity: 0.65;
+      }
+      .node-text {
+        fill: #f8fafc;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 13px;
+        font-weight: 600;
+        text-anchor: middle;
+        pointer-events: none;
+        letter-spacing: 0.2px;
+      }
+      .node-sub {
+        fill: #94a3b8;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 11px;
+        font-weight: 400;
+        text-anchor: middle;
+        pointer-events: none;
+      }
+      .docker-badge-text {
+        fill: #60a5fa;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 13px;
+        font-weight: 700;
+        text-anchor: start;
+        pointer-events: none;
+        letter-spacing: 0.3px;
+      }
+      .title-text {
+        fill: #f8fafc;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        text-anchor: middle;
+        letter-spacing: 0.5px;
+      }
+      .subtitle-text {
+        fill: #94a3b8;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+        text-anchor: middle;
+      }
+      .pulse {
+        animation: pulse 2.5s ease-in-out infinite;
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 0.85; }
+        50% { opacity: 1; }
+      }
+    </style>
+  </defs>
+
+  <!-- Canvas Background & Grid -->
+  <rect x="0" y="0" width="900" height="700" fill="#090d16"/>
+  <rect x="0" y="0" width="900" height="700" fill="url(#grid)"/>
+  <rect x="0" y="0" width="900" height="700" fill="url(#bgGlow)"/>
+
+  <!-- Title -->
+  <text x="450" y="45" class="title-text">✈️ Flight Tracker Pipeline</text>
+  <text x="450" y="70" class="subtitle-text">Real-Time Data Analytics Architecture</text>
+
+  <!-- Docker Frame -->
+  <rect x="30" y="230" width="840" height="450" class="docker-frame" rx="16"/>
+
+  <!-- Docker Badge -->
+  <g transform="translate(30,237)">
+    <rect x="0" y="-22" width="162" height="28" rx="14" fill="#090d16" stroke="#3b82f6" stroke-width="1.5"></rect> 
+    <text x="14" y="-5" style="font-size: 16px;">🐳</text>
+    <text x="36" y="-5" class="docker-badge-text">Docker Container</text>
+  </g>
+
+  <!-- Row 1: External Services -->
+  <g class="node-group" transform="translate(50,95)">
+    <rect x="0" y="0" width="140" height="90" class="node-rect pulse" rx="14"/>
+    <text x="70" y="38" style="font-size: 26px; text-anchor: middle; pointer-events: none">✈️</text>
+    <text x="70" y="60" class="node-text">OpenSky API</text>
+    <text x="70" y="78" class="node-sub">Data Source</text>
+  </g>
+
+  <g class="node-group" transform="translate(270,95)">
+    <rect x="0" y="0" width="140" height="90" class="node-rect pulse" rx="14"/>
+    <text x="70" y="38" style="font-size: 26px; text-anchor: middle; pointer-events: none">🐍</text>
+    <text x="70" y="60" class="node-text">Python Producer</text>
+    <text x="70" y="78" class="node-sub">Script</text>
+  </g>
+
+  <!-- Row 2: Ingestion & Core Messaging -->
+  <g class="node-group" transform="translate(50,280)">
+    <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14"/>
+    <text x="70" y="38" style="font-size: 26px; text-anchor: middle; pointer-events: none">📥</text>
+    <text x="70" y="64" class="node-text">Apache Flume</text>
+    <text x="70" y="80" class="node-sub">Ingestion</text>
+  </g>
+
+  <g class="node-group" transform="translate(270,280)">
+    <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14"/>
+    <text x="70" y="40" style="font-size: 32px; text-anchor: middle; pointer-events: none">⚡</text>
+    <text x="70" y="66" class="node-text">Apache Kafka</text>
+    <text x="70" y="82" class="node-sub">Message Broker</text>
+  </g>
+
+  <g class="node-group" transform="translate(490,280)">
+    <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14"/>
+    <text x="70" y="38" style="font-size: 26px; text-anchor: middle; pointer-events: none">💾</text>
+    <text x="70" y="64" class="node-text">Apache Flume</text>
+    <text x="70" y="80" class="node-sub">Ingestion</text>
+  </g>
+
+  <g class="node-group" transform="translate(710,280)">
+    <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14"/>
+    <text x="70" y="40" style="font-size: 32px; text-anchor: middle; pointer-events: none">🐘</text>
+    <text x="70" y="66" class="node-text">Apache Hadoop</text>
+    <text x="70" y="82" class="node-sub">Data Lake</text>
+  </g>
+
+  <!-- Row 3: Real-Time Stream Processing & Storage -->
+  <g class="node-group" transform="translate(270,430)">
+    <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14"/>
+    <text x="70" y="38" style="font-size: 26px; text-anchor: middle; pointer-events: none">🔥</text>
+    <text x="70" y="60" class="node-text">Apache Spark</text>
+    <text x="70" y="78" class="node-sub">Real-Time Processing</text>
+  </g>
+
+  <g class="node-group" transform="translate(490,430)">
+    <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14"/>
+    <text x="70" y="38" style="font-size: 26px; text-anchor: middle; pointer-events: none">📊</text>
+    <text x="70" y="60" class="node-text">InfluxDB</text>
+    <text x="70" y="78" class="node-sub">Time-Series DB</text>
+  </g>
+
+  <!-- Row 4: Visualization -->
+  <g class="node-group" transform="translate(490,580)">
+    <rect x="0" y="0" width="140" height="90" class="node-rect" rx="14"/>
+    <text x="70" y="38" style="font-size: 26px; text-anchor: middle; pointer-events: none">📈</text>
+    <text x="70" y="60" class="node-text">Grafana</text>
+    <text x="70" y="78" class="node-sub">Visualization</text>
+  </g>
+
+  <!-- Flow Lines -->
+  <!-- OpenSky -> Python Producer -->
+  <path d="M 190 140 L 270 140" class="flow-line" marker-end="url(#arrowBatch)"/>
+  <!-- Python Producer -> Flume 1 -->
+  <path d="M 290 185 L 170 280" class="flow-line" marker-end="url(#arrowBatch)"/>
+  <!-- Flume 1 -> Kafka -->
+  <path d="M 190 325 L 270 325" class="flow-line" marker-end="url(#arrowBatch)"/>
+  <!-- Kafka -> Flume 2 -->
+  <path d="M 410 325 L 490 325" class="flow-line" marker-end="url(#arrowBatch)"/>
+  <!-- Flume 2 -> Hadoop -->
+  <path d="M 630 325 L 710 325" class="flow-line" marker-end="url(#arrowBatch)"/>
+  <!-- Kafka -> Spark -->
+  <path d="M 340 370 L 340 430" class="flow-line-slow" marker-end="url(#arrow)"/>
+  <!-- Spark -> InfluxDB -->
+  <path d="M 410 475 L 490 475" class="flow-line-slow" marker-end="url(#arrow)"/>
+  <!-- InfluxDB -> Grafana -->
+  <path d="M 560 520 L 560 580" class="flow-line-slow" marker-end="url(#arrow)"/>
+
+  <!-- Animated Particles -->
+  <circle cx="0" cy="0" r="3.5" fill="#4ade80">
+    <animateMotion dur="2s" repeatCount="indefinite" path="M190 140 L270 140"/>
+  </circle>
+  <circle cx="0" cy="0" r="3.5" fill="#4ade80">
+    <animateMotion dur="2s" repeatCount="indefinite" path="M290 185 L170 280"/>
+  </circle>
+  <circle cx="0" cy="0" r="3.5" fill="#4ade80">
+    <animateMotion dur="2s" repeatCount="indefinite" path="M190 325 L270 325"/>
+  </circle>
+  <circle cx="0" cy="0" r="3.5" fill="#4ade80">
+    <animateMotion dur="2s" repeatCount="indefinite" path="M410 325 L490 325"/>
+  </circle>
+  <circle cx="0" cy="0" r="3.5" fill="#4ade80">
+    <animateMotion dur="2s" repeatCount="indefinite" path="M630 325 L710 325"/>
+  </circle>
+  <circle cx="0" cy="0" r="3.5" fill="#38bdf8">
+    <animateMotion dur="2.5s" repeatCount="indefinite" path="M340 370 L340 430"/>
+  </circle>
+  <circle cx="0" cy="0" r="3.5" fill="#38bdf8">
+    <animateMotion dur="2.5s" repeatCount="indefinite" path="M410 475 L490 475"/>
+  </circle>
+  <circle cx="0" cy="0" r="3.5" fill="#38bdf8">
+    <animateMotion dur="2.5s" repeatCount="indefinite" path="M560 520 L560 580"/>
+  </circle>
+</svg>
