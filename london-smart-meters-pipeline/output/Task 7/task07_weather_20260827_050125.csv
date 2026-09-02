@@ -1,0 +1,12 @@
+Metric,Value
+Records,"75,631"
+Train,"50,212"
+Val,"12,708"
+Test,"12,711"
+Outliers,"202,103"
+Best Model,Random Forest
+Test Log-RMSE,0.6375
+Test Log-MAE,0.4962
+Test Log-R2,-0.0090
+Top Feature,temp2_x_cos_month
+Runtime(s),85.7

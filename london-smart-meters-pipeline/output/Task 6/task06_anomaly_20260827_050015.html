@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Anomaly Detection Report — 20260827_050015</title>
+<style>
+:root{--p:#4a148c;--pl:#6a1b9a;--ac:#b388ff;--ok:#2e7d32;--danger:#c62828;
+      --bg:#f0f2f5;--w:#fff;--tx:#263238;--mu:#78909c;
+      --bd:#e0e0e0;--r:14px;--sh:0 8px 32px rgba(74,20,140,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);padding:28px 16px}
+.wrap{max-width:1160px;margin:0 auto}
+.hdr{background:linear-gradient(135deg,var(--p) 0%,var(--pl) 100%);
+      border-radius:var(--r);padding:36px 32px;color:#fff;margin-bottom:26px;
+      box-shadow:var(--sh)}
+.hdr h1{font-size:1.9rem;font-weight:700;margin-bottom:10px}
+.hdr p{opacity:.9}
+.bdg{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;
+      border-radius:50px;font-size:.82rem;font-weight:600;margin:4px 3px;
+      background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);color:#fff}
+.bdg.gold{background:rgba(255,215,0,.25)}
+.bdg.red{background:rgba(198,40,40,.35);color:#fff;border-color:rgba(255,255,255,.4)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+       gap:16px;margin-bottom:26px}
+.kpi{background:var(--w);border-radius:var(--r);padding:20px 16px;text-align:center;
+      box-shadow:var(--sh);border:1px solid var(--bd)}
+.kpi.top{border:2px solid var(--danger);background:linear-gradient(180deg,#fff 0%,#ffebee 100%)}
+.kpi.ok{border:2px solid var(--ok);background:linear-gradient(180deg,#fff 0%,#f1f8e9 100%)}
+.kv{font-size:1.8rem;font-weight:800;color:var(--p)}
+.kv.red{color:var(--danger)}
+.kl{font-size:.78rem;color:var(--mu);margin-top:4px;font-weight:500}
+.sec{background:var(--w);border-radius:var(--r);padding:24px 26px;
+      margin-bottom:20px;box-shadow:var(--sh);border:1px solid var(--bd)}
+.sh{font-size:1.15rem;font-weight:700;color:var(--p);margin-bottom:16px;
+     padding-bottom:10px;border-bottom:2px solid #e8eaf6;
+     display:flex;align-items:center;gap:8px}
+.sh .ln{display:inline-block;width:4px;height:20px;background:var(--ac);border-radius:2px}
+.tw{overflow-x:auto;border-radius:8px;border:1px solid var(--bd)}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:540px}
+thead th{background:linear-gradient(180deg,var(--pl) 0%,var(--p) 100%);
+          color:#fff;padding:12px 14px;text-align:left;font-weight:600}
+td{padding:10px 14px;border-bottom:1px solid #f0f0f0}
+tbody tr:nth-child(even){background:#fafbfc}
+tbody tr:hover{background:#e8eaf6}
+.alert-row{background:linear-gradient(90deg,#ffebee 0%,#ffcdd2 100%)!important;
+            font-weight:600;border-left:3px solid var(--danger)}
+.verify-box{background:linear-gradient(90deg,#e8f5e9,#f1f8e9);
+             border-left:4px solid var(--ok);border-radius:8px;
+             padding:16px 20px;margin-bottom:20px;
+             display:flex;align-items:center;gap:12px;
+             font-size:.92rem;color:#2e7d32;font-weight:500}
+.mcard-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.mcard{background:#f5f7fa;border-radius:12px;padding:20px;text-align:center;
+         border:2px solid var(--bd);transition:border-color .2s}
+.mcard:hover{border-color:var(--ac)}
+.mcard-name{font-size:.82rem;font-weight:700;color:var(--mu);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.mcard-val{font-size:1.7rem;font-weight:800;color:var(--p);margin-bottom:4px}
+.mcard-sub{font-size:.78rem;color:var(--mu)}
+.feat-row{display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.feat-name{width:280px;font-size:.88rem;font-weight:500;flex-shrink:0}
+.feat-bar-wrap{flex:1;height:18px;background:#eceff1;border-radius:9px;
+                overflow:hidden;margin:0 12px}
+.feat-bar{height:100%;border-radius:9px;
+           background:linear-gradient(90deg,var(--ac) 0%,var(--pl) 100%)}
+.feat-val{width:64px;text-align:right;font-weight:700;color:var(--p);font-size:.88rem;flex-shrink:0}
+.foot{text-align:center;padding:24px;color:var(--mu);font-size:.82rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <h1>🔍 Anomaly Detection Report</h1>
+  <p>Energy Consumption Analysis · Multi-Method Detection · PySpark ML</p>
+  <div style="margin-top:14px">
+    <span class="bdg">📅 20260827_050015</span>
+    <span class="bdg red">🔥 150,530 Anomalies (4.28%)</span>
+    <span class="bdg">🏠 5,566 Households</span>
+    <span class="bdg">📊 3,517,032 Records</span>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="kpi top"><div class="kv red">150,530</div><div class="kl">Combined Anomalies</div></div>
+  <div class="kpi"><div class="kv">80,336</div><div class="kl">Z-Score Anomalies</div></div>
+  <div class="kpi"><div class="kv">110,651</div><div class="kl">IQR Anomalies</div></div>
+  <div class="kpi"><div class="kv">40,457</div><div class="kl">Overlap (Both)</div></div>
+  <div class="kpi ok"><div class="kv">5,489</div><div class="kl">Affected Households</div></div>
+  <div class="kpi"><div class="kv">343,117</div><div class="kl">Extreme Values</div></div>
+</div>
+
+<div class="verify-box">
+  <span style="font-size:1.4rem">✅</span>
+  <span><strong>Formula Check:</strong> 80,336 (Z-Score) + 110,651 (IQR) − 40,457 (Overlap) = <strong>150,530</strong> Combined Anomalies</span>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>📊 Detailed Statistics</div>
+  <div class="tw"><table>
+    <thead><tr><th>Metric</th><th>Count</th><th>Percentage</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Total Records</strong></td><td>3,517,032</td><td>100.00%</td></tr>
+      <tr><td>Z-Score Anomalies (|Z| &gt; 3.0)</td><td>80,336</td><td>2.28%</td></tr>
+      <tr><td>IQR Anomalies (1.5 × IQR)</td><td>110,651</td><td>3.15%</td></tr>
+      <tr><td>Overlap (Detected by Both)</td><td>40,457</td><td>1.15%</td></tr>
+      <tr class="alert-row"><td>🔥 Combined Anomalies</td><td>150,530</td><td>4.28%</td></tr>
+      <tr><td>Extreme Outliers (5% - 95%)</td><td>343,117</td><td>9.76%</td></tr>
+      <tr><td><strong>Affected Meter IDs</strong></td><td>5,489</td><td>98.62%</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🔬 Detection Method Breakdown</div>
+  <div class="mcard-grid">
+    <div class="mcard"><div class="mcard-name">Z-Score Only</div><div class="mcard-val">39,879</div><div class="mcard-sub">26.49% of anomalies</div></div>
+    <div class="mcard"><div class="mcard-name">IQR Only</div><div class="mcard-val">70,194</div><div class="mcard-sub">46.63% of anomalies</div></div>
+    <div class="mcard"><div class="mcard-name">Both Methods</div><div class="mcard-val">40,457</div><div class="mcard-sub">26.88% of anomalies</div></div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>⚠️ Top 10 Extreme Anomalies</div>
+  <div class="tw"><table>
+    <thead><tr><th>Meter ID</th><th>Date</th><th>Energy</th><th>HH Mean</th><th>Z-Score</th><th>Z-Anom</th><th>IQR-Anom</th></tr></thead>
+    <tbody>
+        <tr>
+            <td><strong>MAC000197</strong></td>
+            <td>2013-01-14</td>
+            <td>0.17 kWh</td>
+            <td>0.00 kWh</td>
+            <td style="color:var(--danger);font-weight:700;">23.98</td>
+            <td><span class="bdg red">Yes</span></td>
+            <td><span class="bdg red">Yes</span></td>
+        </tr>
+        <tr>
+            <td><strong>MAC002594</strong></td>
+            <td>2013-04-26</td>
+            <td>0.02 kWh</td>
+            <td>0.00 kWh</td>
+            <td style="color:var(--danger);font-weight:700;">23.53</td>
+            <td><span class="bdg red">Yes</span></td>
+            <td><span class="bdg red">Yes</span></td>
+        </tr>
+        <tr>
+            <td><strong>MAC005376</strong></td>
+            <td>2014-02-28</td>
+            <td>3.80 kWh</td>
+            <td>0.28 kWh</td>
+            <td style="color:var(--danger);font-weight:700;">20.90</td>
+            <td><span class="bdg red">Yes</span></td>
+            <td><span class="bdg red">Yes</span></td>
+        </tr>
+        <tr>
+            <td><strong>MAC000350</strong></td>
+            <td>2014-02-28</td>
+            <td>1.51 kWh</td>
+            <td>0.18 kWh</td>
+            <td style="color:var(--danger);font-weight:700;">20.42</td>
+            <td><span class="bdg red">Yes</span></td>
+            <td><span class="bdg red">Yes</span></td>
+        </tr>
+        <tr>
+            <td><strong>MAC001109</strong></td>
+            <td>2014-02-28</td>
+            <td>1.91 kWh</td>
+            <td>0.22 kWh</td>
+            <td style="color:var(--danger);font-weight:700;">19.37</td>
+            <td><span class="bdg red">Yes</span></td>
+            <td><span class="bdg red">Yes</span></td>
+        </tr>
+        <tr>
+            <td><strong>MAC001372</strong></td>
+            <td>2013-11-29</td>
+            <td>0.48 kWh</td>
+            <td>0.03 kWh</td>
+            <td style="color:var(--danger);font-weight:700;">19.09</td>
+            <td><span class="bdg red">Yes</span></td>
+            <td><span class="bdg red">Yes</span></td>
+        </tr>
+        <tr>
+            <td><strong>MAC000937</strong></td>
+            <td>2014-02-28</td>
+            <td>0.52 kWh</td>
+            <td>0.05 kWh</td>
+            <td style="color:var(--danger);font-weight:700;">18.44</td>
+            <td><span class="bdg red">Yes</span></td>
+            <td><span class="bdg red">Yes</span></td>
+        </tr>
+        <tr>
+            <td><strong>MAC002450</strong></td>
+            <td>2013-01-22</td>
+            <td>0.37 kWh</td>
+            <td>0.04 kWh</td>
+            <td style="color:var(--danger);font-weight:700;">18.21</td>
+            <td><span class="bdg red">Yes</span></td>
+            <td><span class="bdg red">Yes</span></td>
+        </tr>
+        <tr>
+            <td><strong>MAC004902</strong></td>
+            <td>2014-02-28</td>
+            <td>5.16 kWh</td>
+            <td>0.46 kWh</td>
+            <td style="color:var(--danger);font-weight:700;">17.98</td>
+            <td><span class="bdg red">Yes</span></td>
+            <td><span class="bdg red">Yes</span></td>
+        </tr>
+        <tr>
+            <td><strong>MAC001906</strong></td>
+            <td>2014-02-28</td>
+            <td>1.34 kWh</td>
+            <td>0.20 kWh</td>
+            <td style="color:var(--danger);font-weight:700;">17.71</td>
+            <td><span class="bdg red">Yes</span></td>
+            <td><span class="bdg red">Yes</span></td>
+        </tr></tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🏠 Top Households with Highest Anomaly Frequency</div>
+  
+        <div class="feat-row">
+            <div class="feat-name"><strong>MAC002594</strong> (600 / 600 days)</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%;background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%);"></div></div>
+            <div class="feat-val" style="color:var(--danger);">100.0%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"><strong>MAC004672</strong> (598 / 598 days)</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%;background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%);"></div></div>
+            <div class="feat-val" style="color:var(--danger);">100.0%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"><strong>MAC001309</strong> (656 / 656 days)</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%;background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%);"></div></div>
+            <div class="feat-val" style="color:var(--danger);">100.0%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"><strong>MAC000037</strong> (817 / 817 days)</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%;background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%);"></div></div>
+            <div class="feat-val" style="color:var(--danger);">100.0%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"><strong>MAC000197</strong> (826 / 826 days)</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%;background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%);"></div></div>
+            <div class="feat-val" style="color:var(--danger);">100.0%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"><strong>MAC002136</strong> (622 / 622 days)</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%;background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%);"></div></div>
+            <div class="feat-val" style="color:var(--danger);">100.0%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"><strong>MAC003627</strong> (507 / 507 days)</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%;background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%);"></div></div>
+            <div class="feat-val" style="color:var(--danger);">100.0%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"><strong>MAC003156</strong> (353 / 356 days)</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:99.2%;background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%);"></div></div>
+            <div class="feat-val" style="color:var(--danger);">99.2%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"><strong>MAC001976</strong> (601 / 627 days)</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:95.9%;background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%);"></div></div>
+            <div class="feat-val" style="color:var(--danger);">95.9%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"><strong>MAC005199</strong> (658 / 759 days)</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:86.7%;background:linear-gradient(90deg, #e53935 0%, #b71c1c 100%);"></div></div>
+            <div class="feat-val" style="color:var(--danger);">86.7%</div>
+        </div>
+</div>
+
+<div class="foot">Generated by Anomaly Detection Pipeline &nbsp;·&nbsp; 20260827_050015</div>
+</div>
+</body></html>

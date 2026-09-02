@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Weather Impact Report — 20260827_050125</title>
+<style>
+:root{--p:#1a237e;--pl:#3949ab;--ac:#42a5f5;--ok:#2e7d32;
+      --bg:#f0f2f5;--w:#fff;--tx:#263238;--mu:#78909c;
+      --bd:#e0e0e0;--r:14px;--sh:0 8px 32px rgba(26,35,126,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);padding:28px 16px}
+.wrap{max-width:1160px;margin:0 auto}
+.hdr{background:linear-gradient(135deg,var(--p) 0%,var(--pl) 100%);
+      border-radius:var(--r);padding:36px 32px;color:#fff;margin-bottom:26px;
+      box-shadow:var(--sh)}
+.hdr h1{font-size:1.9rem;font-weight:700;margin-bottom:10px}
+.hdr p{opacity:.9}
+.bdg{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;
+      border-radius:50px;font-size:.82rem;font-weight:600;margin:4px 3px;
+      background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);color:#fff}
+.bdg.gold{background:rgba(255,215,0,.25)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+       gap:16px;margin-bottom:26px}
+.kpi{background:var(--w);border-radius:var(--r);padding:20px 16px;text-align:center;
+      box-shadow:var(--sh);border:1px solid var(--bd)}
+.kpi.top{border:2px solid var(--ok);background:linear-gradient(180deg,#fff 0%,#f1f8e9 100%)}
+.kv{font-size:1.8rem;font-weight:800;color:var(--p)}
+.kl{font-size:.78rem;color:var(--mu);margin-top:4px;font-weight:500}
+.sec{background:var(--w);border-radius:var(--r);padding:24px 26px;
+      margin-bottom:20px;box-shadow:var(--sh);border:1px solid var(--bd)}
+.sh{font-size:1.15rem;font-weight:700;color:var(--p);margin-bottom:16px;
+     padding-bottom:10px;border-bottom:2px solid #e8eaf6;
+     display:flex;align-items:center;gap:8px}
+.sh .ln{display:inline-block;width:4px;height:20px;background:var(--ac);border-radius:2px}
+.tw{overflow-x:auto;border-radius:8px;border:1px solid var(--bd)}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:540px}
+thead th{background:linear-gradient(180deg,var(--pl) 0%,var(--p) 100%);
+          color:#fff;padding:12px 14px;text-align:left;font-weight:600}
+td{padding:10px 14px;border-bottom:1px solid #f0f0f0}
+tbody tr:nth-child(even){background:#fafbfc}
+tbody tr:hover{background:#e8eaf6}
+.best-row{background:linear-gradient(90deg,#e8f5e9 0%,#c8e6c9 100%)!important;
+           font-weight:600;border-left:3px solid var(--ok)}
+.feat-row{display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.feat-name{width:250px;font-size:.88rem;font-weight:500;flex-shrink:0}
+.feat-bar-wrap{flex:1;height:18px;background:#eceff1;border-radius:9px;
+                overflow:hidden;margin:0 12px}
+.feat-bar{height:100%;border-radius:9px;
+           background:linear-gradient(90deg,var(--ac) 0%,var(--pl) 100%)}
+.feat-val{width:64px;text-align:right;font-weight:700;color:var(--p);font-size:.88rem;flex-shrink:0}
+.foot{text-align:center;padding:24px;color:var(--mu);font-size:.82rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <h1>🌤️ Weather Impact Analysis Report</h1>
+  <p>Thermodynamic & Meteorological Sensitivity Analysis · PySpark ML</p>
+  <div style="margin-top:14px">
+    <span class="bdg">📅 20260827_050125</span>
+    <span class="bdg gold">🏆 Best: Random Forest</span>
+    <span class="bdg">📊 34 Weather Features</span>
+    <span class="bdg">🗂️ 75,631 Samples</span>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="kpi top"><div class="kv">-0.0090</div><div class="kl">Test Log-R² Score</div></div>
+  <div class="kpi"><div class="kv">0.6375</div><div class="kl">Test Log-RMSE</div></div>
+  <div class="kpi"><div class="kv">0.4962</div><div class="kl">Test Log-MAE</div></div>
+  <div class="kpi"><div class="kv">34</div><div class="kl">Engineered Features</div></div>
+  <div class="kpi"><div class="kv">75,631</div><div class="kl">Evaluated Samples</div></div>
+  <div class="kpi"><div class="kv">85.7s</div><div class="kl">Total Runtime</div></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>📊 Model Comparison (70/15/15 Temporal Split)</div>
+  <div class="tw"><table>
+    <thead><tr><th>Model</th><th>Val R²</th><th>Test Log-R²</th><th>Test Log-RMSE</th><th>Test Log-MAE</th><th>Time (s)</th></tr></thead>
+    <tbody>
+        <tr class="">
+            <td><strong>Linear Regression</strong></td>
+            <td>-0.0054</td>
+            <td>-0.0000</td>
+            <td>0.6347</td>
+            <td>0.4965</td>
+            <td>5.5</td>
+        </tr>
+        <tr class="best-row">
+            <td><strong>Random Forest</strong> 🏆</td>
+            <td>-0.0015</td>
+            <td>-0.0090</td>
+            <td>0.6375</td>
+            <td>0.4962</td>
+            <td>11.4</td>
+        </tr>
+        <tr class="">
+            <td><strong>Gradient Boosted Trees</strong></td>
+            <td>-0.0077</td>
+            <td>-0.0089</td>
+            <td>0.6375</td>
+            <td>0.4961</td>
+            <td>38.1</td>
+        </tr></tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🌡️ Temperature Range Sensitivity Breakdown</div>
+  <div class="tw"><table>
+    <thead><tr><th>Thermal Bin</th><th>Mean Consumption</th><th>Std Deviation</th><th>Record Count</th></tr></thead>
+    <tbody>
+        <tr>
+            <td><strong>< 0°C</strong></td>
+            <td>9.68 kWh</td>
+            <td>5.60</td>
+            <td>1,245</td>
+        </tr>
+        <tr>
+            <td><strong>0-5°C</strong></td>
+            <td>9.37 kWh</td>
+            <td>5.54</td>
+            <td>12,262</td>
+        </tr>
+        <tr>
+            <td><strong>5-10°C</strong></td>
+            <td>9.02 kWh</td>
+            <td>5.47</td>
+            <td>31,350</td>
+        </tr>
+        <tr>
+            <td><strong>10-15°C</strong></td>
+            <td>8.27 kWh</td>
+            <td>5.06</td>
+            <td>25,914</td>
+        </tr>
+        <tr>
+            <td><strong>15-20°C</strong></td>
+            <td>7.61 kWh</td>
+            <td>4.72</td>
+            <td>22,799</td>
+        </tr>
+        <tr>
+            <td><strong>20-25°C</strong></td>
+            <td>7.50 kWh</td>
+            <td>4.46</td>
+            <td>5,720</td>
+        </tr>
+        <tr>
+            <td><strong>> 25°C</strong></td>
+            <td>7.22 kWh</td>
+            <td>4.79</td>
+            <td>147</td>
+        </tr></tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🔍 Top 10 Influential Weather Features</div>
+  
+        <div class="feat-row">
+            <div class="feat-name"> 1. temp2_x_cos_month</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">16.24%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 2. cos_month</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:74.6%"></div></div>
+            <div class="feat-val">12.11%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 3. is_heating_season</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:54.3%"></div></div>
+            <div class="feat-val">8.81%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 4. temp_range</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:27.0%"></div></div>
+            <div class="feat-val">4.39%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 5. temp_pressure</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:26.0%"></div></div>
+            <div class="feat-val">4.22%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 6. temp_x_cos_month</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:24.1%"></div></div>
+            <div class="feat-val">3.92%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 7. pressure</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:23.6%"></div></div>
+            <div class="feat-val">3.84%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 8. temp_avg</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:22.5%"></div></div>
+            <div class="feat-val">3.65%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 9. heat_index</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:21.6%"></div></div>
+            <div class="feat-val">3.51%</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name">10. temp_wind</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:21.4%"></div></div>
+            <div class="feat-val">3.48%</div>
+        </div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🗂️ Dataset Temporal Partitioning</div>
+  <div class="tw"><table>
+    <thead><tr><th>Split Partition</th><th>Record Count</th><th>Share Percentage</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Training Set (70%)</strong></td><td>50,212</td><td>66.4%</td></tr>
+      <tr><td><strong>Validation Set (15%)</strong></td><td>12,708</td><td>16.8%</td></tr>
+      <tr><td><strong>Testing Set (15%)</strong></td><td>12,711</td><td>16.8%</td></tr>
+      <tr class="best-row"><td><strong>Total Evaluated Samples</strong></td><td>75,631</td><td>100.0%</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="foot">Generated by Task 7 Weather Impact Pipeline &nbsp;·&nbsp; 20260827_050125</div>
+</div>
+</body></html>

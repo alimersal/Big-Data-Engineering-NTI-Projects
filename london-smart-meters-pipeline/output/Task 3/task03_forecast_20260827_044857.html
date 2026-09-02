@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Forecast Report — 20260827_044857</title>
+<style>
+:root{--p:#bf360c;--pl:#e64a19;--ac:#ffab40;--ok:#2e7d32;
+      --bg:#f0f2f5;--w:#fff;--tx:#263238;--mu:#78909c;
+      --bd:#e0e0e0;--r:14px;--sh:0 8px 32px rgba(191,54,12,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);padding:28px 16px}
+.wrap{max-width:1160px;margin:0 auto}
+.hdr{background:linear-gradient(135deg,var(--p) 0%,var(--pl) 100%);
+      border-radius:var(--r);padding:36px 32px;color:#fff;margin-bottom:26px;
+      box-shadow:var(--sh)}
+.hdr h1{font-size:1.9rem;font-weight:700;margin-bottom:10px}
+.hdr p{opacity:.9}
+.bdg{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;
+      border-radius:50px;font-size:.82rem;font-weight:600;margin:4px 3px;
+      background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);color:#fff}
+.bdg.gold{background:rgba(255,215,0,.25)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+       gap:16px;margin-bottom:26px}
+.kpi{background:var(--w);border-radius:var(--r);padding:20px 16px;text-align:center;
+      box-shadow:var(--sh);border:1px solid var(--bd)}
+.kpi.top{border:2px solid var(--ok);background:linear-gradient(180deg,#fff 0%,#f1f8e9 100%)}
+.kv{font-size:1.8rem;font-weight:800;color:var(--p)}
+.kl{font-size:.78rem;color:var(--mu);margin-top:4px;font-weight:500}
+.sec{background:var(--w);border-radius:var(--r);padding:24px 26px;
+      margin-bottom:20px;box-shadow:var(--sh);border:1px solid var(--bd)}
+.sh{font-size:1.15rem;font-weight:700;color:var(--p);margin-bottom:16px;
+     padding-bottom:10px;border-bottom:2px solid #e8eaf6;
+     display:flex;align-items:center;gap:8px}
+.sh .ln{display:inline-block;width:4px;height:20px;background:var(--ac);border-radius:2px}
+.tw{overflow-x:auto;border-radius:8px;border:1px solid var(--bd)}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:540px}
+thead th{background:linear-gradient(180deg,var(--pl) 0%,var(--p) 100%);
+          color:#fff;padding:12px 14px;text-align:left;font-weight:600}
+td{padding:10px 14px;border-bottom:1px solid #f0f0f0}
+tbody tr:nth-child(even){background:#fafbfc}
+tbody tr:hover{background:#e8eaf6}
+.best-row{background:linear-gradient(90deg,#e8f5e9 0%,#c8e6c9 100%)!important;
+           font-weight:600;border-left:3px solid var(--ok)}
+.foot{text-align:center;padding:24px;color:var(--mu);font-size:.82rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <h1>📈 Energy Forecasting Report</h1>
+  <p>Next-day energy consumption prediction · Regression with PySpark ML</p>
+  <div style="margin-top:14px">
+    <span class="bdg">📅 20260827_044857</span>
+    <span class="bdg gold">🏆 Best: LinearRegression</span>
+    <span class="bdg">📊 40 Features</span>
+    <span class="bdg">🗂️ 160,532 Samples</span>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="kpi top"><div class="kv">3.8154</div><div class="kl">RMSE</div></div>
+  <div class="kpi"><div class="kv">2.2282</div><div class="kl">MAE</div></div>
+  <div class="kpi"><div class="kv">0.8561</div><div class="kl">R² Score</div></div>
+  <div class="kpi"><div class="kv">-0.0797</div><div class="kl">Mean Residual</div></div>
+  <div class="kpi"><div class="kv">3.8147</div><div class="kl">Std Residual</div></div>
+  <div class="kpi"><div class="kv">4.8s</div><div class="kl">Train Time</div></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>📊 Model Comparison (Ranked by RMSE)</div>
+  <div class="tw"><table>
+    <thead><tr><th>Model</th><th>Val RMSE</th><th>Test RMSE</th><th>MAE</th>
+    <th>R²</th><th>Time (s)</th></tr></thead>
+    <tbody>
+        <tr class="best-row">
+            <td><strong>LinearRegression</strong> 🏆</td>
+            <td>2.6074</td><td>3.8154</td>
+            <td>2.2282</td><td>0.8561</td>
+            <td>4.8</td>
+        </tr>
+        <tr class="">
+            <td><strong>RandomForestRegressor</strong> </td>
+            <td>2.6261</td><td>4.0841</td>
+            <td>2.2516</td><td>0.8352</td>
+            <td>17.6</td>
+        </tr></tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🔍 Top 10 Important Features</div>
+  <div class="tw"><table>
+    <thead><tr><th>Rank</th><th>Feature</th><th>Importance</th></tr></thead>
+    <tbody>
+        <tr><td>1</td><td><strong>rolling_mean_7d</strong></td><td>76.772232</td></tr>
+        <tr><td>2</td><td><strong>energy_sum</strong></td><td>67.041332</td></tr>
+        <tr><td>3</td><td><strong>energy_mean</strong></td><td>61.229340</td></tr>
+        <tr><td>4</td><td><strong>rolling_mean_30d</strong></td><td>35.250450</td></tr>
+        <tr><td>5</td><td><strong>lag_sum_1</strong></td><td>30.643983</td></tr>
+        <tr><td>6</td><td><strong>energy_min</strong></td><td>23.827517</td></tr>
+        <tr><td>7</td><td><strong>rolling_mean_14d</strong></td><td>23.070440</td></tr>
+        <tr><td>8</td><td><strong>lag_mean_1</strong></td><td>14.563019</td></tr>
+        <tr><td>9</td><td><strong>lag_sum_2</strong></td><td>10.189703</td></tr>
+        <tr><td>10</td><td><strong>lag_sum_7</strong></td><td>9.217810</td></tr></tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🗂️ Dataset Summary</div>
+  <div class="tw"><table>
+    <thead><tr><th>Split</th><th>Count</th><th>%</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Train</strong></td><td>100,060</td><td>62.3%</td></tr>
+      <tr><td><strong>Val</strong></td><td>30,238</td><td>18.8%</td></tr>
+      <tr><td><strong>Test</strong></td><td>30,234</td><td>18.8%</td></tr>
+      <tr style="background:#e8eaf6;font-weight:700">
+        <td>Total</td><td>160,532</td><td>100%</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="foot">Generated by Energy Forecasting Pipeline &nbsp;·&nbsp; 20260827_044857</div>
+</div>
+</body></html>

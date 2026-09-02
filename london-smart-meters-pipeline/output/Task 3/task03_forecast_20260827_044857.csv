@@ -1,0 +1,69 @@
+ENERGY FORECASTING REPORT
+Generated,20260827_044857
+Best Model,LinearRegression
+Test RMSE,3.8154
+Test MAE,2.2282
+Test R2,0.8561
+
+── SECTION 1: MODEL COMPARISON ──────────────────────────────
+Model,Val_RMSE,Test_RMSE,MAE,R2,Time_s,Best
+LinearRegression,2.6074,3.8154,2.2282,0.8561,4.8,YES
+RandomForestRegressor,2.6261,4.0841,2.2516,0.8352,17.6,
+
+── SECTION 2: FEATURE IMPORTANCE ──────────────────────────────
+Rank,Feature,Importance
+1,rolling_mean_7d,76.772232
+2,energy_sum,67.041332
+3,energy_mean,61.229340
+4,rolling_mean_30d,35.250450
+5,lag_sum_1,30.643983
+6,energy_min,23.827517
+7,rolling_mean_14d,23.070440
+8,lag_mean_1,14.563019
+9,lag_sum_2,10.189703
+10,lag_sum_7,9.217810
+11,lag_mean_7,5.813813
+12,lag_mean_2,5.713032
+13,cv,5.356970
+14,peak_to_mean_ratio,5.194310
+15,hh_range,4.856692
+16,energy_std,4.839006
+17,hh_stddev,4.839006
+18,lag_mean_3,4.611270
+19,energy_max,4.183747
+20,lag_max_7,2.544091
+21,energy_median,2.530982
+22,temperatureHigh,1.530734
+23,lag_max_1,1.207032
+24,dewPoint,1.196069
+25,load_factor,0.931327
+26,temperatureMax,0.838006
+27,day_of_week,0.688393
+28,temperatureMin,0.603633
+29,rolling_std_7d,0.500254
+30,temperatureLow,0.429430
+31,season,0.346529
+32,cloudCover,0.323057
+33,is_weekend,0.280401
+34,windSpeed,0.206357
+35,month,0.169408
+36,quarter,0.112895
+37,is_holiday,0.097929
+38,pressure,0.074635
+39,humidity,0.013185
+40,windBearing,0.003055
+
+── SECTION 3: RESIDUALS SUMMARY ──────────────────────────────
+Metric,Value
+Mean Residual,-0.0797
+Std Residual,3.8147
+Min Residual,-73.6396
+Max Residual,53.7463
+
+── SECTION 4: DATASET SUMMARY ──────────────────────────────
+Total Records,160532
+Train,100060,62.3%
+Validation,30238,18.8%
+Test,30234,18.8%
+Features,40
+Classes,3

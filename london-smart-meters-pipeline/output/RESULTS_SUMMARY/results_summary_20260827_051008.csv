@@ -1,0 +1,9 @@
+Metric,Value
+Best ACORN F1 (Task 1),0.4305
+Best Tariff AUC (Task 2),0.5433
+Best Forecast RMSE (Task 3),3.8154
+Best Peak RMSE (Task 4),0.0328
+"Segmentation K, HH/Shape (Task 5)",2/2
+Combined Anomaly Rate (Task 6),4.3%
+Weather Log-R2 (Task 7),-0.009
+Neural Net MAPE (Task 8),36.63%

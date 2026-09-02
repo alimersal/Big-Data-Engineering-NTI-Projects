@@ -1,0 +1,16 @@
+Metric,Value
+Total Records,"199,816"
+Train Size,"159,852"
+Test Size,"39,964"
+Outliers Removed,"202,103"
+Model,Multi-Input NN
+Parameters,"93,345"
+Best Epoch,53
+Test RMSE,4.1218
+Test MAE,2.7873
+Test R2,0.3651
+Test MAPE (%),36.63
+Log-RMSE,0.5237
+Log-MAE,0.3926
+Log-R2,0.2368
+Runtime (s),171.9

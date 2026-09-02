@@ -1,0 +1,79 @@
+ACORN CLASSIFICATION REPORT
+Generated,20260827_044504
+Best Model,RandomForest
+Test F1,0.4305
+Test Accuracy,0.4281
+
+── SECTION 1: MODEL COMPARISON ──────────────────────────────
+Model,Val_F1,Test_F1,Accuracy,Precision,Recall,Time_s,Best
+RandomForest,0.4352,0.4305,0.4281,0.4490,0.4281,6.9,YES
+DecisionTree,0.4239,0.4203,0.4220,0.4421,0.4220,3.9,
+LogisticRegression,0.4154,0.4084,0.4131,0.4261,0.4131,13.2,
+NeuralNetwork,0.3457,0.3371,0.4076,0.2937,0.4076,10.6,
+LinearSVM_OvR,0.3050,0.2955,0.3653,0.3939,0.3653,3.2,
+
+── SECTION 2: PER-CLASS METRICS ──────────────────────────────
+Class,Total,Correct,Precision,Recall,F1,Specificity
+Affluent,4786,1863,0.5545,0.3893,0.4574,0.7866
+Adversity,3811,1908,0.4058,0.5007,0.4483,0.6503
+Comfortable,3203,1281,0.3427,0.3999,0.3691,0.7142
+
+── SECTION 3: FEATURE IMPORTANCE ──────────────────────────────
+Rank,Feature,Importance
+1,rolling_std_7d,0.168101
+2,hh_peak_to_offpeak_ratio,0.085721
+3,rolling_mean_14d,0.057847
+4,hh_night_ratio,0.056805
+5,rolling_mean_30d,0.051616
+6,hh_offpeak_night_avg,0.038708
+7,rolling_mean_7d,0.037662
+8,energy_median,0.033225
+9,hh_morning_peak_avg,0.030909
+10,energy_min,0.030714
+11,hh_peak_hour_avg,0.030616
+12,energy_mean,0.028917
+13,energy_sum,0.028254
+14,lag_mean_7,0.027545
+15,tariff_index,0.023616
+16,lag_sum_1,0.019827
+17,energy_std,0.018375
+18,lag_max_1,0.018352
+19,lag_mean_1,0.016810
+20,peak_to_mean_ratio,0.016033
+21,hh_stddev,0.015673
+22,cv,0.015102
+23,temperatureMax,0.014370
+24,humidity,0.013699
+25,hh_daytime_avg,0.013260
+26,cloudCover,0.012181
+27,energy_max,0.011873
+28,load_factor,0.011766
+29,hh_range,0.011512
+30,range,0.011278
+31,temperatureMin,0.010793
+32,pressure,0.009635
+33,windSpeed,0.009406
+34,month,0.009007
+35,season,0.006663
+36,day_of_week,0.002879
+37,is_weekend,0.001252
+
+── SECTION 4: CONFUSION MATRIX (COUNTS) ──────────────────────
+,Affluent,Adversity,Comfortable
+Affluent,1863,1607,1316
+Adversity,762,1908,1141
+Comfortable,735,1187,1281
+
+── SECTION 5: CONFUSION MATRIX (NORMALISED) ──────────────────
+,Affluent,Adversity,Comfortable
+Affluent,0.3893,0.3358,0.2750
+Adversity,0.1999,0.5007,0.2994
+Comfortable,0.2295,0.3706,0.3999
+
+── SECTION 6: DATASET SUMMARY ──────────────────────────────
+Total Records,79935
+Train,56126,70.2%
+Validation,12009,15.0%
+Test,11800,14.8%
+Features,37
+Classes,3

@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Segmentation Report — 20260827_045209</title>
+<style>
+:root{--p:#1b5e20;--pl:#2e7d32;--ac:#66bb6a;--ok:#f9a825;
+      --bg:#f0f2f5;--w:#fff;--tx:#263238;--mu:#78909c;
+      --bd:#e0e0e0;--r:14px;--sh:0 8px 32px rgba(27,94,32,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);padding:28px 16px}
+.wrap{max-width:1160px;margin:0 auto}
+.hdr{background:linear-gradient(135deg,var(--p) 0%,var(--pl) 100%);
+      border-radius:var(--r);padding:36px 32px;color:#fff;margin-bottom:26px;
+      box-shadow:var(--sh)}
+.hdr h1{font-size:1.9rem;font-weight:700;margin-bottom:10px}
+.hdr p{opacity:.9}
+.bdg{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;
+      border-radius:50px;font-size:.82rem;font-weight:600;margin:4px 3px;
+      background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);color:#fff}
+.bdg.gold{background:rgba(255,215,0,.25)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+       gap:16px;margin-bottom:26px}
+.kpi{background:var(--w);border-radius:var(--r);padding:20px 16px;text-align:center;
+      box-shadow:var(--sh);border:1px solid var(--bd)}
+.kpi.top{border:2px solid var(--ok);background:linear-gradient(180deg,#fff 0%,#f1f8e9 100%)}
+.kv{font-size:1.8rem;font-weight:800;color:var(--p)}
+.kl{font-size:.78rem;color:var(--mu);margin-top:4px;font-weight:500}
+.sec{background:var(--w);border-radius:var(--r);padding:24px 26px;
+      margin-bottom:20px;box-shadow:var(--sh);border:1px solid var(--bd)}
+.sh{font-size:1.15rem;font-weight:700;color:var(--p);margin-bottom:16px;
+     padding-bottom:10px;border-bottom:2px solid #e8eaf6;
+     display:flex;align-items:center;gap:8px}
+.sh .ln{display:inline-block;width:4px;height:20px;background:var(--ac);border-radius:2px}
+.tw{overflow-x:auto;border-radius:8px;border:1px solid var(--bd)}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:540px}
+thead th{background:linear-gradient(180deg,var(--pl) 0%,var(--p) 100%);
+          color:#fff;padding:12px 14px;text-align:left;font-weight:600}
+td{padding:10px 14px;border-bottom:1px solid #f0f0f0}
+tbody tr:nth-child(even){background:#fafbfc}
+tbody tr:hover{background:#e8eaf6}
+.best-row{background:linear-gradient(90deg,#e8f5e9 0%,#c8e6c9 100%)!important;
+           font-weight:600;border-left:3px solid var(--ok)}
+.feat-row{display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.feat-name{width:250px;font-size:.88rem;font-weight:500;flex-shrink:0}
+.feat-bar-wrap{flex:1;height:18px;background:#eceff1;border-radius:9px;
+                overflow:hidden;margin:0 12px}
+.feat-bar{height:100%;border-radius:9px;
+           background:linear-gradient(90deg,var(--ac) 0%,var(--pl) 100%)}
+.feat-val{width:64px;text-align:right;font-weight:700;color:var(--p);font-size:.88rem;flex-shrink:0}
+.foot{text-align:center;padding:24px;color:var(--mu);font-size:.82rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <h1>⚡ Customer Segmentation Report</h1>
+  <p>Load Shape Analysis & Household Behavioral Clustering · PySpark ML</p>
+  <div style="margin-top:14px">
+    <span class="bdg">📅 20260827_045209</span>
+    <span class="bdg gold">🏆 Optimal K: 2</span>
+    <span class="bdg">👥 5,566 Households</span>
+    <span class="bdg">📊 23 Features</span>
+    <span class="bdg">🎯 Silhouette: 0.6388</span>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="kpi top"><div class="kv">0.6388</div><div class="kl">Household Silhouette</div></div>
+  <div class="kpi"><div class="kv">2</div><div class="kl">Optimal Clusters</div></div>
+  <div class="kpi"><div class="kv">5,566</div><div class="kl">Total Households</div></div>
+  <div class="kpi"><div class="kv">0.0937</div><div class="kl">Load Shape Silhouette</div></div>
+  <div class="kpi"><div class="kv">2</div><div class="kl">Shape Clusters</div></div>
+  <div class="kpi"><div class="kv">149,869</div><div class="kl">Daily Profiles</div></div>
+</div>
+
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>📊 Part A: Daily Load Shape Clusters (48 Half-Hour Slots)</div>
+  <div class="grid" style="margin-bottom:18px;">
+    <div class="kpi top"><div class="kv">2</div><div class="kl">Optimal Clusters (K)</div></div>
+    <div class="kpi"><div class="kv">0.0937</div><div class="kl">Silhouette Score</div></div>
+    <div class="kpi"><div class="kv">149,869</div><div class="kl">Daily Profiles Analyzed</div></div>
+  </div>
+  <div class="tw"><table>
+    <thead><tr><th>Cluster</th><th>Count</th><th>Percentage</th><th>Pattern Characteristic</th></tr></thead>
+    <tbody>
+        <tr>
+            <td><strong>Cluster 0</strong></td>
+            <td>104,023</td>
+            <td>69.41%</td>
+            <td><span class="bdg" style="background:#e8eaf6;color:#1a237e;border-color:#c5cae9;">🌇 Evening Peak (17:00 - 20:00)</span></td>
+        </tr>
+        <tr>
+            <td><strong>Cluster 1</strong></td>
+            <td>45,846</td>
+            <td>30.59%</td>
+            <td><span class="bdg" style="background:#e8eaf6;color:#1a237e;border-color:#c5cae9;">🌅 Morning Peak (07:00 - 09:00)</span></td>
+        </tr></tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🏠 Part B: Household Segmentation Distribution</div>
+  <div class="tw"><table>
+    <thead><tr><th>Cluster</th><th>Households Count</th><th>Percentage</th></tr></thead>
+    <tbody>
+        <tr>
+            <td><strong>Cluster 0</strong></td>
+            <td>4,503</td>
+            <td>80.90%</td>
+        </tr>
+        <tr>
+            <td><strong>Cluster 1</strong></td>
+            <td>1,063</td>
+            <td>19.10%</td>
+        </tr></tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>📈 Optimal K Evaluation (Silhouette Metric)</div>
+  <div class="tw"><table>
+    <thead><tr><th>Cluster Count (K)</th><th>Silhouette Score</th><th>Status</th></tr></thead>
+    <tbody>
+        <tr class="best-row">
+            <td><strong>K = 2</strong> 🏆</td>
+            <td>0.6388</td>
+            <td><span class="bdg gold" style="color:#2e7d32;background:#e8f5e9;border-color:#a5d6a7;">BEST K</span></td>
+        </tr>
+        <tr >
+            <td><strong>K = 3</strong></td>
+            <td>0.4424</td>
+            <td><span style="color:#78909c;">Evaluated</span></td>
+        </tr>
+        <tr >
+            <td><strong>K = 4</strong></td>
+            <td>0.3258</td>
+            <td><span style="color:#78909c;">Evaluated</span></td>
+        </tr>
+        <tr >
+            <td><strong>K = 5</strong></td>
+            <td>0.2741</td>
+            <td><span style="color:#78909c;">Evaluated</span></td>
+        </tr>
+        <tr >
+            <td><strong>K = 6</strong></td>
+            <td>0.2405</td>
+            <td><span style="color:#78909c;">Evaluated</span></td>
+        </tr></tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🔍 Top Discriminating Behavioral Features</div>
+  
+        <div class="feat-row">
+            <div class="feat-name"> 1. avg_daily_mean</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">1.0000</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 2. avg_daily_max</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">1.0000</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 3. avg_daily_std</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">1.0000</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 4. avg_daily_sum</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">1.0000</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 5. avg_cv</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">1.0000</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 6. avg_peak_ratio</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">1.0000</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 7. avg_load_factor</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">1.0000</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 8. avg_peak_hour_max</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">1.0000</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 9. avg_reading_count</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">1.0000</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name">10. avg_stddev</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">1.0000</div>
+        </div>
+</div>
+
+<div class="foot">Generated by Task 5 Segmentation Pipeline &nbsp;·&nbsp; 20260827_045209</div>
+</div>
+</body></html>

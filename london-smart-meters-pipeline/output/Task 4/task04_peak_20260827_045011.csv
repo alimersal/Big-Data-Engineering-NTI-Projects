@@ -1,0 +1,68 @@
+PEAK DEMAND PREDICTION REPORT
+Generated,20260827_045011
+Best Model,LinearRegression
+Test RMSE,0.0328
+Test MAE,0.0187
+Test R2,0.9979
+
+── SECTION 1: MODEL COMPARISON ──────────────────────────────
+Model,Val_RMSE,Test_RMSE,MAE,R2,Time_s,Best
+LinearRegression,0.0291,0.0328,0.0187,0.9979,1.9,YES
+GBT,0.0959,0.1171,0.0496,0.9735,36.0,
+RandomForest,0.1150,0.1438,0.0655,0.9600,10.5,
+
+── SECTION 2: FEATURE IMPORTANCE ──────────────────────────────
+Rank,Feature,Importance
+1,hh_range,0.487910
+2,energy_min,0.083293
+3,energy_std,0.067703
+4,hh_stddev,0.067703
+5,peak_to_mean_ratio,0.056712
+6,cv,0.047478
+7,load_factor,0.014772
+8,energy_median,0.012194
+9,lag_max_7,0.008877
+10,energy_mean,0.008289
+11,lag_max_1,0.007554
+12,rolling_mean_30d,0.004463
+13,lag_mean_1,0.004297
+14,lag_sum_1,0.003930
+15,energy_sum,0.003872
+16,lag_mean_7,0.003564
+17,lag_sum_7,0.003317
+18,rolling_std_7d,0.002373
+19,rolling_mean_7d,0.001693
+20,lag_mean_2,0.001150
+21,lag_mean_3,0.000716
+22,rolling_mean_14d,0.000673
+23,is_weekend,0.000522
+24,quarter,0.000514
+25,month,0.000397
+26,is_holiday,0.000389
+27,cloudCover,0.000271
+28,temperatureMin,0.000202
+29,windBearing,0.000197
+30,temperatureHigh,0.000189
+31,temperatureMax,0.000182
+32,dewPoint,0.000147
+33,lag_sum_2,0.000117
+34,pressure,0.000098
+35,temperatureLow,0.000089
+36,windSpeed,0.000037
+37,day_of_week,0.000033
+38,humidity,0.000026
+39,season,0.000024
+
+── SECTION 3: RESIDUALS SUMMARY ──────────────────────────────
+Metric,Value
+Mean Residual,-0.0001
+Std Residual,0.0328
+Min Residual,-0.4883
+Max Residual,0.3114
+
+── SECTION 4: DATASET SUMMARY ──────────────────────────────
+Total Records,140185
+Train,99840,71.2%
+Validation,20173,14.4%
+Test,20172,14.4%
+Features,39

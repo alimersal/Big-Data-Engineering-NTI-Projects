@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tariff Report — 20260827_044639</title>
+<style>
+:root{--p:#004d40;--pl:#00796b;--ac:#26c6da;--ok:#2e7d32;
+      --bg:#f0f2f5;--w:#fff;--tx:#263238;--mu:#78909c;
+      --bd:#e0e0e0;--r:14px;--sh:0 8px 32px rgba(0,77,64,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);padding:28px 16px}
+.wrap{max-width:1160px;margin:0 auto}
+.hdr{background:linear-gradient(135deg,var(--p) 0%,var(--pl) 100%);
+      border-radius:var(--r);padding:36px 32px;color:#fff;margin-bottom:26px;
+      box-shadow:var(--sh)}
+.hdr h1{font-size:1.9rem;font-weight:700;margin-bottom:10px}
+.hdr p{opacity:.9}
+.bdg{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;
+      border-radius:50px;font-size:.82rem;font-weight:600;margin:4px 3px;
+      background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);color:#fff}
+.bdg.gold{background:rgba(255,215,0,.25)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+       gap:16px;margin-bottom:26px}
+.kpi{background:var(--w);border-radius:var(--r);padding:20px 16px;text-align:center;
+      box-shadow:var(--sh);border:1px solid var(--bd)}
+.kpi.top{border:2px solid var(--ok);background:linear-gradient(180deg,#fff 0%,#f1f8e9 100%)}
+.kv{font-size:1.8rem;font-weight:800;color:var(--p)}
+.kl{font-size:.78rem;color:var(--mu);margin-top:4px;font-weight:500}
+.sec{background:var(--w);border-radius:var(--r);padding:24px 26px;
+      margin-bottom:20px;box-shadow:var(--sh);border:1px solid var(--bd)}
+.sh{font-size:1.15rem;font-weight:700;color:var(--p);margin-bottom:16px;
+     padding-bottom:10px;border-bottom:2px solid #e8eaf6;
+     display:flex;align-items:center;gap:8px}
+.sh .ln{display:inline-block;width:4px;height:20px;background:var(--ac);border-radius:2px}
+.tw{overflow-x:auto;border-radius:8px;border:1px solid var(--bd)}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:540px}
+thead th{background:linear-gradient(180deg,var(--pl) 0%,var(--p) 100%);
+          color:#fff;padding:12px 14px;text-align:left;font-weight:600}
+td{padding:10px 14px;border-bottom:1px solid #f0f0f0}
+tbody tr:nth-child(even){background:#fafbfc}
+tbody tr:hover{background:#e8eaf6}
+.best-row{background:linear-gradient(90deg,#e8f5e9 0%,#c8e6c9 100%)!important;
+           font-weight:600;border-left:3px solid var(--ok)}
+.cm-grid{display:grid;grid-template-columns:auto repeat(2,1fr);
+          gap:2px;max-width:480px;margin:0 auto}
+.cm-cell,.cm-header,.cm-label{padding:14px 8px;text-align:center;font-weight:600;border-radius:5px}
+.cm-header{background:var(--p);color:#fff;font-size:.82rem}
+.cm-label{background:var(--pl);color:#fff;font-size:.82rem;
+           display:flex;align-items:center;justify-content:center}
+.feat-row{display:flex;align-items:center;padding:8px 0;border-bottom:1px solid #f0f0f0}
+.feat-name{width:250px;font-size:.88rem;font-weight:500;flex-shrink:0}
+.feat-bar-wrap{flex:1;height:18px;background:#eceff1;border-radius:9px;
+                overflow:hidden;margin:0 12px}
+.feat-bar{height:100%;border-radius:9px;
+           background:linear-gradient(90deg,var(--ac) 0%,var(--pl) 100%)}
+.feat-val{width:64px;text-align:right;font-weight:700;color:var(--p);font-size:.88rem;flex-shrink:0}
+.foot{text-align:center;padding:24px;color:var(--mu);font-size:.82rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <h1>⚡ Tariff Classification Report</h1>
+  <p>Binary classification of Standard vs Time-of-Use tariff · Smart Meter Energy Features</p>
+  <div style="margin-top:14px">
+    <span class="bdg">📅 20260827_044639</span>
+    <span class="bdg gold">🏆 Best: RandomForest</span>
+    <span class="bdg">🧬 2 Classes</span>
+    <span class="bdg">📊 36 Features</span>
+    <span class="bdg">🗂️ 79,995 Samples</span>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="kpi top"><div class="kv">0.5433</div><div class="kl">AUC Score</div></div>
+  <div class="kpi"><div class="kv">0.4857</div><div class="kl">F1 Score</div></div>
+  <div class="kpi"><div class="kv">0.4426</div><div class="kl">Accuracy</div></div>
+  <div class="kpi"><div class="kv">0.7007</div><div class="kl">Precision</div></div>
+  <div class="kpi"><div class="kv">0.4426</div><div class="kl">Recall</div></div>
+  <div class="kpi"><div class="kv">8.1s</div><div class="kl">Train Time</div></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>📊 Model Comparison (Ranked by AUC)</div>
+  <div class="tw"><table>
+    <thead><tr><th>Model</th><th>Val F1</th><th>Test F1</th><th>Accuracy</th>
+    <th>AUC</th><th>Precision</th><th>Recall</th><th>Time (s)</th></tr></thead>
+    <tbody>
+        <tr class="best-row">
+            <td><strong>RandomForest</strong> 🏆</td>
+            <td>0.4884</td><td>0.4857</td>
+            <td>0.4426</td><td>0.5433</td>
+            <td>0.7007</td><td>0.4426</td>
+            <td>8.1</td>
+        </tr>
+        <tr class="">
+            <td><strong>DecisionTree</strong> </td>
+            <td>0.4335</td><td>0.4298</td>
+            <td>0.3988</td><td>0.5276</td>
+            <td>0.7053</td><td>0.3988</td>
+            <td>7.2</td>
+        </tr>
+        <tr class="">
+            <td><strong>LogisticRegression</strong> </td>
+            <td>0.5104</td><td>0.5106</td>
+            <td>0.4630</td><td>0.5183</td>
+            <td>0.6904</td><td>0.4630</td>
+            <td>7.0</td>
+        </tr></tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>📋 Per-Class Metrics</div>
+  <div class="tw"><table>
+    <thead><tr><th>Class</th><th>Total</th><th>Correct</th><th>Precision</th>
+    <th>Recall</th><th>F1</th><th>Specificity</th></tr></thead>
+    <tbody>
+        <tr>
+            <td><strong>Std</strong></td>
+            <td>9,450</td><td>3,656</td>
+            <td>0.8225</td><td>0.3869</td>
+            <td>0.5262</td><td>0.6658</td>
+        </tr>
+        <tr>
+            <td><strong>ToU</strong></td>
+            <td>2,361</td><td>1,572</td>
+            <td>0.2134</td><td>0.6658</td>
+            <td>0.3232</td><td>0.3869</td>
+        </tr></tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>📊 Confusion Matrices</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;">
+    <div>
+      <div style="text-align:center;font-weight:700;color:var(--p);margin-bottom:10px;font-size:1rem;">Normalised</div>
+      <div class="cm-grid"><div></div><div class="cm-header">Std</div><div class="cm-header">ToU</div><div class="cm-label">Std</div><div class="cm-cell" style="background:rgb(137,178,173);color:#102027">38.7%</div><div class="cm-cell" style="background:rgb(87,141,132);color:#102027">61.3%</div><div class="cm-label">ToU</div><div class="cm-cell" style="background:rgb(149,187,182);color:#102027">33.4%</div><div class="cm-cell" style="background:rgb(75,132,123);color:#ffffff">66.6%</div></div>
+    </div>
+    <div>
+      <div style="text-align:center;font-weight:700;color:var(--p);margin-bottom:10px;font-size:1rem;">Raw Counts</div>
+      <div class="cm-grid"><div></div><div class="cm-header">Std</div><div class="cm-header">ToU</div><div class="cm-label">Std</div><div class="cm-cell" style="background:rgb(83,138,129);color:#102027">3,656</div><div class="cm-cell" style="background:rgb(0,77,64);color:#ffffff">5,794</div><div class="cm-label">ToU</div><div class="cm-cell" style="background:rgb(193,220,217);color:#102027">789</div><div class="cm-cell" style="background:rgb(163,197,193);color:#102027">1,572</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🔍 Top Feature Importances</div>
+  
+        <div class="feat-row">
+            <div class="feat-name"> 1. hh_peak_to_offpeak_ratio</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:100.0%"></div></div>
+            <div class="feat-val">0.0955</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 2. hh_night_ratio</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:62.0%"></div></div>
+            <div class="feat-val">0.0592</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 3. energy_min</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:52.7%"></div></div>
+            <div class="feat-val">0.0503</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 4. pressure</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:38.1%"></div></div>
+            <div class="feat-val">0.0364</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 5. hh_stddev</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:38.0%"></div></div>
+            <div class="feat-val">0.0362</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 6. rolling_mean_14d</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:37.8%"></div></div>
+            <div class="feat-val">0.0360</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 7. load_factor</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:37.5%"></div></div>
+            <div class="feat-val">0.0358</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 8. rolling_mean_30d</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:36.0%"></div></div>
+            <div class="feat-val">0.0344</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name"> 9. energy_std</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:34.8%"></div></div>
+            <div class="feat-val">0.0333</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name">10. rolling_mean_7d</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:33.9%"></div></div>
+            <div class="feat-val">0.0323</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name">11. windSpeed</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:32.2%"></div></div>
+            <div class="feat-val">0.0308</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name">12. lag_max_1</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:31.3%"></div></div>
+            <div class="feat-val">0.0299</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name">13. peak_to_mean_ratio</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:31.3%"></div></div>
+            <div class="feat-val">0.0299</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name">14. rolling_std_7d</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:30.8%"></div></div>
+            <div class="feat-val">0.0294</div>
+        </div>
+        <div class="feat-row">
+            <div class="feat-name">15. temperatureMax</div>
+            <div class="feat-bar-wrap"><div class="feat-bar" style="width:30.6%"></div></div>
+            <div class="feat-val">0.0292</div>
+        </div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🗂️ Dataset Split</div>
+  <div class="tw"><table>
+    <thead><tr><th>Split</th><th>Count</th><th>%</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Train</strong></td><td>56,168</td><td>70.2%</td></tr>
+      <tr><td><strong>Val</strong></td><td>12,016</td><td>15.0%</td></tr>
+      <tr><td><strong>Test</strong></td><td>11,811</td><td>14.8%</td></tr>
+      <tr style="background:#e8eaf6;font-weight:700">
+        <td>Total</td><td>79,995</td><td>100%</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="foot">Generated by Tariff Classification Pipeline &nbsp;·&nbsp; 20260827_044639</div>
+</div>
+</body></html>

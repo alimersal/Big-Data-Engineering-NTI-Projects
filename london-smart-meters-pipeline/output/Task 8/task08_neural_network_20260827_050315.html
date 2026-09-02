@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Multi-Input Neural Network Report — 20260827_050315</title>
+<style>
+:root{--p:#311b92;--pl:#512da8;--ac:#b39ddb;--ok:#2e7d32;
+      --bg:#f0f2f5;--w:#fff;--tx:#263238;--mu:#78909c;
+      --bd:#e0e0e0;--r:14px;--sh:0 8px 32px rgba(49,27,146,.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--tx);padding:28px 16px}
+.wrap{max-width:1160px;margin:0 auto}
+.hdr{background:linear-gradient(135deg,var(--p) 0%,var(--pl) 100%);
+      border-radius:var(--r);padding:36px 32px;color:#fff;margin-bottom:26px;
+      box-shadow:var(--sh)}
+.hdr h1{font-size:1.9rem;font-weight:700;margin-bottom:10px}
+.hdr p{opacity:.9}
+.bdg{display:inline-flex;align-items:center;gap:5px;padding:5px 14px;
+      border-radius:50px;font-size:.82rem;font-weight:600;margin:4px 3px;
+      background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.25);color:#fff}
+.bdg.gold{background:rgba(255,215,0,.25)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+       gap:16px;margin-bottom:26px}
+.kpi{background:var(--w);border-radius:var(--r);padding:20px 16px;text-align:center;
+      box-shadow:var(--sh);border:1px solid var(--bd)}
+.kpi.top{border:2px solid var(--ok);background:linear-gradient(180deg,#fff 0%,#f1f8e9 100%)}
+.kv{font-size:1.8rem;font-weight:800;color:var(--p)}
+.kl{font-size:.78rem;color:var(--mu);margin-top:4px;font-weight:500}
+.sec{background:var(--w);border-radius:var(--r);padding:24px 26px;
+      margin-bottom:20px;box-shadow:var(--sh);border:1px solid var(--bd)}
+.sh{font-size:1.15rem;font-weight:700;color:var(--p);margin-bottom:16px;
+     padding-bottom:10px;border-bottom:2px solid #e8eaf6;
+     display:flex;align-items:center;gap:8px}
+.sh .ln{display:inline-block;width:4px;height:20px;background:var(--ac);border-radius:2px}
+.tw{overflow-x:auto;border-radius:8px;border:1px solid var(--bd)}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:540px}
+thead th{background:linear-gradient(180deg,var(--pl) 0%,var(--p) 100%);
+          color:#fff;padding:12px 14px;text-align:left;font-weight:600}
+td{padding:10px 14px;border-bottom:1px solid #f0f0f0}
+tbody tr:nth-child(even){background:#fafbfc}
+tbody tr:hover{background:#e8eaf6}
+.best-row{background:linear-gradient(90deg,#e8f5e9 0%,#c8e6c9 100%)!important;
+           font-weight:600;border-left:3px solid var(--ok)}
+.branch-card{background:#f8fafc;border-radius:10px;padding:16px 18px;margin-bottom:12px;border-left:4px solid var(--pl);border:1px solid var(--bd)}
+.branch-title{font-weight:700;color:var(--p);margin-bottom:6px;font-size:.95rem}
+.branch-desc{color:var(--tx);font-size:.86rem;font-family:monospace}
+.foot{text-align:center;padding:24px;color:var(--mu);font-size:.82rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hdr">
+  <h1>🧠 Multi-Input Neural Network Report</h1>
+  <p>Deep Learning Forecasting · 4-Branch Multimodal Architecture · Keras / TensorFlow</p>
+  <div style="margin-top:14px">
+    <span class="bdg">📅 20260827_050315</span>
+    <span class="bdg gold">🏆 Best Epoch: 53</span>
+    <span class="bdg">⚡ 93,345 Parameters</span>
+    <span class="bdg">🗂️ 199,816 Samples</span>
+  </div>
+</div>
+
+<div class="grid">
+  <div class="kpi top"><div class="kv">0.3651</div><div class="kl">Test R² Score</div></div>
+  <div class="kpi"><div class="kv">4.1218</div><div class="kl">Test RMSE (kWh)</div></div>
+  <div class="kpi"><div class="kv">2.7873</div><div class="kl">Test MAE (kWh)</div></div>
+  <div class="kpi"><div class="kv">36.63%</div><div class="kl">Test MAPE</div></div>
+  <div class="kpi"><div class="kv">0.2368</div><div class="kl">Log-Scale R²</div></div>
+  <div class="kpi"><div class="kv">171.9s</div><div class="kl">Training Runtime</div></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>📊 Performance Metrics Summary</div>
+  <div class="tw"><table>
+    <thead><tr><th>Evaluation Metric</th><th>Original Scale (kWh)</th><th>Log Scale</th></tr></thead>
+    <tbody>
+      <tr class="best-row"><td><strong>R² Score (Variance Explained)</strong></td><td><strong>0.3651</strong></td><td><strong>0.2368</strong></td></tr>
+      <tr><td>Root Mean Squared Error (RMSE)</td><td>4.1218</td><td>0.5237</td></tr>
+      <tr><td>Mean Absolute Error (MAE)</td><td>2.7873</td><td>0.3926</td></tr>
+      <tr><td>Mean Absolute Percentage Error (MAPE)</td><td>36.63%</td><td>—</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🏗️ 4-Branch Neural Architecture</div>
+  <div class="branch-card">
+    <div class="branch-title">1. Time-Series Branch</div>
+    <div class="branch-desc">10 Lag & Rolling Features → Dense(128) → BatchNorm → Dropout(0.3) → Dense(64) → Dropout(0.2)</div>
+  </div>
+  <div class="branch-card">
+    <div class="branch-title">2. Weather Branch</div>
+    <div class="branch-desc">13 Meteorological Features → Dense(64) → BatchNorm → Dropout(0.3) → Dense(32)</div>
+  </div>
+  <div class="branch-card">
+    <div class="branch-title">3. Temporal Cyclical Branch</div>
+    <div class="branch-desc">9 Calendar Features → Dense(32) → Dropout(0.2)</div>
+  </div>
+  <div class="branch-card">
+    <div class="branch-title">4. Household Metadata Embeddings</div>
+    <div class="branch-desc">Tariff Embedding (4D) + ACORN Embedding (8D) → Concatenate → Dense(16)</div>
+  </div>
+  <div class="branch-card" style="border-left-color:var(--ac);">
+    <div class="branch-title">5. Fusion & Dense Regressor Layers</div>
+    <div class="branch-desc">Concatenate(All 4 Branches) → Dense(256) → BatchNorm → Dropout(0.4) → Dense(128) → Dropout(0.3) → Dense(64) → Dense(1)</div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sh"><span class="ln"></span>🗂️ Data Partitioning</div>
+  <div class="tw"><table>
+    <thead><tr><th>Partition</th><th>Record Count</th><th>Share Percentage</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Training Partition</strong></td><td>159,852</td><td>80.0%</td></tr>
+      <tr><td><strong>Testing Partition</strong></td><td>39,964</td><td>20.0%</td></tr>
+      <tr class="best-row"><td><strong>Total Evaluated Samples</strong></td><td>199,816</td><td>100.0%</td></tr>
+    </tbody>
+  </table></div>
+</div>
+
+<div class="foot">Generated by Task 8 Multi-Input Neural Network Pipeline &nbsp;·&nbsp; 20260827_050315</div>
+</div>
+</body></html>
