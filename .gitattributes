@@ -1,0 +1,2 @@
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+flight_tracker-pipeline/extra-utils/tools/*.exe filter=lfs diff=lfs merge=lfs -text
